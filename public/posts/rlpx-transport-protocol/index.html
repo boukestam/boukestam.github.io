@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+
+    
+      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self'; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdn.jsdelivr.net/; prefetch-src 'self'; connect-src 'self' https://www.google-analytics.com;">
+
+    
+
+    <meta name="author" content="Bouke Stam">
+    <meta name="description" content="Explanation of the RLPx Transport Protocol">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="RLPx Transport Protocol"/>
+<meta name="twitter:description" content="Explanation of the RLPx Transport Protocol"/>
+
+    <meta property="og:title" content="RLPx Transport Protocol" />
+<meta property="og:description" content="Explanation of the RLPx Transport Protocol" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://boukestam.github.io/posts/rlpx-transport-protocol/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-01-19T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-01-19T00:00:00+00:00" />
+
+
+
+    <title>
+  RLPx Transport Protocol · Technistuff
+</title>
+
+    
+      <link rel="canonical" href="https://boukestam.github.io/posts/rlpx-transport-protocol/">
+    
+
+    <link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.d9fddbffe6f27e69985dc5fe0471cdb0e57fbf4775714bc3d847accb08f4a1f6.css" integrity="sha256-2f3b/&#43;byfmmYXcX&#43;BHHNsOV/v0d1cUvD2Eesywj0ofY=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="/css/coder-dark.min.002ee2378e14c7a68f1f0a53d9694ed252090987c4e768023fac694a4fc5f793.css" integrity="sha256-AC7iN44Ux6aPHwpT2WlO0lIJCYfE52gCP6xpSk/F95M=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+    <meta name="generator" content="Hugo 0.98.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="preload-transitions colorscheme-auto">
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Technistuff
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/projects/">Projects</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/contact/">Contact me</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://boukestam.github.io/posts/rlpx-transport-protocol/">
+              RLPx Transport Protocol
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime="2022-01-19T00:00:00Z">
+                January 19, 2022
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              6-minute read
+            </span>
+          </div>
+          
+          
+          <div class="tags">
+  <i class="fa fa-tag" aria-hidden="true"></i>
+    <span class="tag">
+      <a href="/tags/ethereum/">ethereum</a>
+    </span></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <p>I think the easiest way to start is by just trying to connect to another node and seeing what data we get sent. We&rsquo;ll pick it up from there.</p>
+<p>Through the Ethereum documentation I manage to find <a href="https://github.com/ethereum/devp2p/blob/master/rlpx.md">a document</a> that explains the process of connecting to another node. The protocol is called the <strong>RLPx Transport protocol</strong>. It&rsquo;s TCP-based and starts out a handshake. After the handshake we send and receive a hello message that communicates some information about the version and capabilities. A capability is for example the &rsquo;eth&rsquo; protocol. This is the protocol that communicates new transactions or blocks for example. The flow looks like this:</p>
+<ol>
+<li>send auth message</li>
+<li>receive ack message</li>
+<li>send hello message</li>
+<li>receive hello message</li>
+<li>check capabilities (for example ethereum version)</li>
+<li>decide to keep or destroy connection based on capabilities</li>
+</ol>
+<p>The first step in the handshake is to send an <code>auth</code> message. The <code>auth</code> message looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>auth = auth-size || enc-auth-body
+</span></span><span style="display:flex;"><span>auth-size = size of enc-auth-body, encoded as a big-endian 16-bit integer
+</span></span><span style="display:flex;"><span>auth-vsn = 4
+</span></span><span style="display:flex;"><span>auth-body = [sig, initiator-pubk, initiator-nonce, auth-vsn, ...]
+</span></span><span style="display:flex;"><span>enc-auth-body = ecies.encrypt(recipient-pubk, auth-body || auth-padding, auth-size)
+</span></span><span style="display:flex;"><span>auth-padding = arbitrary data
+</span></span></code></pre></div><p>Apparently the <code>auth</code> message consists of the size of the message and then an encrypted body, got that part. The size is a big-endian 16-bit integer. The body consists of the following parts:</p>
+<ul>
+<li>signature (ECDSA signature)</li>
+<li>public key (our public key, 64 bytes long)</li>
+<li>nonce (random 32 bytes)</li>
+<li>version number (needs to be 4)</li>
+</ul>
+<p>Apparently the signature is a signed message using standard ECDSA with P256 Curve. It&rsquo;s calculated like this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>shared-secret = SSK(initiator-privkey, receiver-pubkey)
+</span></span><span style="display:flex;"><span>signature := Sign(ecdhe-random-key, shared-secret ^ init_nonce) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Where SSK(initiator-privkey, receiver-pubkey) is a symmetric shared secret key as given by ECDH.
+</span></span></code></pre></div><p>The nonce is just a random 32 byte sequence that we can decide ourselves. The ECIES encryption is new to me, so let&rsquo;s look that up.</p>
+<h3 id="ecies">
+  ECIES
+  <a class="heading-link" href="#ecies">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>A quick google search tells us that ECIES stands for Elliptic Curve Integrated Encryption Scheme. I tried multiple libraries, but unfortunately none of them give the correct output. I tried writing it by myself but there were multiple things that were just not documented well and almost impossible to find out by myself. I then found the <a href="https://github.com/ethereumjs/ethereumjs-devp2p/blob/master/src/rlpx/ecies.ts">ethereumjs-devp2p repository</a> that has a nice implementation that I could slightly modify and use in my project. The implementation is too big to put in this post, but if you&rsquo;re interested you can find it <a href="https://github.com/boukestam/eth-node/blob/main/ecies.ts">here</a>.</p>
+<h3 id="auth-message">
+  Auth message
+  <a class="heading-link" href="#auth-message">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>I started of by creating a new type of peer class called &lsquo;RLPxPeer&rsquo;. In this constructor I initialize the ECIES class we just added:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">this</span>.eceis = <span style="font-weight:bold">new</span> ECIES(privateKey, initiatorEndpoint.id, receiverEndpoint.id);
+</span></span></code></pre></div><p>Then we can create a new TCP socket and connect it to our node&rsquo;s TCP port. When it&rsquo;s connected we can create and send the auth message:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">this</span>.socket = <span style="font-weight:bold">new</span> net.Socket();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">this</span>.socket.connect(receiverEndpoint.tcpPort, receiverEndpoint.ip, () =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> auth = <span style="font-weight:bold">this</span>.eceis.createAuthEIP8();
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">this</span>.socket.write(auth);
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><h3 id="ack-message">
+  Ack message
+  <a class="heading-link" href="#ack-message">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>After sending the auth message, this is what we get back:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Data &lt;Buffer 01 df 04 b6 07 65 53 85 47 c4 ee 0e 8f 20 16 72 ff 2c c6 48 2b b4 aa 33 65 42 28 23 e0 99 d6 10 61 60 58 df 38 bf 9b 64 d6 f6 f7 43 5e 6c cf 62 91 a4 ... 431 more bytes&gt;
+</span></span><span style="display:flex;"><span>Data &lt;Buffer dc e6 43 88 10 e3 5e 1c 77 92 95 55 f8 5c 04 a7 2f cf 70 23 5d dd 55 80 2f e2 a7 10 28 08 3d 0a 42 12 59 a6 ed 95 c7 c4 3d 14 f7 1e d6 b5 25 1e b7 e8 ... 158 more bytes&gt;
+</span></span></code></pre></div><p>According to the documentation, data is streamed to us. That means that we can&rsquo;t just see every piece of data coming in as being it&rsquo;s own message. We have to store and combine all incoming data in a buffer and then parse that buffer and extract all messages. Every time we get some data from the socket we append it to a buffer:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">this</span>.buffer = Buffer.concat([<span style="font-weight:bold">this</span>.buffer, data]);
+</span></span></code></pre></div><p>Then we loop through the buffer and try to parse it:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">while</span> (<span style="font-weight:bold">this</span>.buffer.length &gt; 0) {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> size = <span style="font-weight:bold">this</span>.parse();
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">if</span> (size === 0) <span style="font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">this</span>.buffer = <span style="font-weight:bold">this</span>.buffer.slice(size);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>In the parse function we check if we are waiting for the ack message. If we are, then we parse it and send a hello message:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">if</span> (<span style="font-weight:bold">this</span>.state === <span style="font-style:italic">&#39;auth&#39;</span>) {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> ackSizeBuffer = <span style="font-weight:bold">this</span>.buffer.slice(0, 2);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> ackSize = bufferToInt(ackSizeBuffer);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">this</span>.eceis.parseAckEIP8(<span style="font-weight:bold">this</span>.buffer.slice(0, ackSize + 2));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">this</span>.state = <span style="font-style:italic">&#39;header&#39;</span>;
+</span></span><span style="display:flex;"><span>  process.nextTick(() =&gt; <span style="font-weight:bold">this</span>.sendHello());
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">return</span> ackSize + 2;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="hello-message">
+  Hello message
+  <a class="heading-link" href="#hello-message">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>After the authentication handshake every message is encoded using a frame:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>frame = header-ciphertext || header-mac || frame-ciphertext || frame-mac
+</span></span><span style="display:flex;"><span>header-ciphertext = aes(aes-secret, header)
+</span></span><span style="display:flex;"><span>header = frame-size || header-data || header-padding
+</span></span><span style="display:flex;"><span>header-data = [capability-id, context-id]
+</span></span><span style="display:flex;"><span>capability-id = integer, always zero
+</span></span><span style="display:flex;"><span>context-id = integer, always zero
+</span></span><span style="display:flex;"><span>header-padding = zero-fill header to 16-byte boundary
+</span></span><span style="display:flex;"><span>frame-ciphertext = aes(aes-secret, frame-data || frame-padding)
+</span></span><span style="display:flex;"><span>frame-padding = zero-fill frame-data to 16-byte boundary
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// hello message
+</span></span><span style="display:flex;"><span>frame-data = msg-id || msg-data
+</span></span><span style="display:flex;"><span>frame-size = length of frame-data, encoded as a 24bit big-endian integer
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// all other messages
+</span></span><span style="display:flex;"><span>frame-data = msg-id || snappyCompress(msg-data)
+</span></span><span style="display:flex;"><span>frame-size = length of frame-data encoded as a 24bit big-endian integer
+</span></span></code></pre></div><p>Thankfully this handled by the ECIES implementation, because this is very complicated. A message is described by the message code, which indicates the kind of message, and the data. To send a message we just create and send the header and the body:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span>send (code: <span style="">number</span>, data: <span style="">Buffer</span>, compress: <span style="">boolean</span>) {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">if</span> (<span style="font-weight:bold">this</span>.closed) <span style="font-weight:bold">return</span> console.error(<span style="font-style:italic">&#39;Socket already closed&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> msg = Buffer.concat([rlp.encode(code), compress ? compressSync(data) : data]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> header = <span style="font-weight:bold">this</span>.eceis.createHeader(msg.length);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">this</span>.socket.write(header);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> body = <span style="font-weight:bold">this</span>.eceis.createBody(msg);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">this</span>.socket.write(body);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>As you can see, we also compress the data based on a parameter, the compression uses the <a href="https://www.npmjs.com/package/snappy">snappy library</a>. We can use this function to send a hello message. The hello message should have the following components:</p>
+<ul>
+<li><code>protocolVersion</code> the version of the &ldquo;p2p&rdquo; capability, <strong>5</strong>.</li>
+<li><code>clientId</code> Specifies the client software identity, as a human-readable string (e.g. &ldquo;Ethereum(++)/1.0.0&rdquo;).</li>
+<li><code>capabilities</code> is the list of supported capabilities and their versions: <code>[[cap1, capVersion1], [cap2, capVersion2], ...]</code>.</li>
+<li><code>listenPort</code> specifies the port that the client is listening on (on the interface that the present connection traverses). If 0 it indicates the client is not listening.</li>
+<li><code>nodeId</code> is the secp256k1 public key corresponding to the node&rsquo;s private key.</li>
+</ul>
+<p>Using this we can our hello message like this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span>sendHello () {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">this</span>.send(0x00, rlp.encode([
+</span></span><span style="display:flex;"><span>    intToBuffer(5),
+</span></span><span style="display:flex;"><span>    Buffer.<span style="font-weight:bold">from</span>(<span style="font-style:italic">&#39;eth-node/v0.1&#39;</span>, <span style="font-style:italic">&#39;ascii&#39;</span>),
+</span></span><span style="display:flex;"><span>    [
+</span></span><span style="display:flex;"><span>      [Buffer.<span style="font-weight:bold">from</span>(<span style="font-style:italic">&#39;eth&#39;</span>, <span style="font-style:italic">&#39;ascii&#39;</span>), intToBuffer(66)]
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    intToBuffer(<span style="font-weight:bold">this</span>.peer.initiatorEndpoint.tcpPort),
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">this</span>.peer.initiatorEndpoint.id
+</span></span><span style="display:flex;"><span>  ]), <span style="font-weight:bold">false</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>As you can see, we call our node the &rsquo;eth-node/v.0.1&rsquo;. And we only support the latest version of the ethereum protocol (version 66). I then also wrote some code to handle the parsing of the response hello message. When we see that the peer doesn&rsquo;t support <code>eth 66</code>, we send a disconnect message.</p>
+<p>A lot of nodes actually don&rsquo;t respond or respond with a <code>Too many peers</code> disconnect message. But after a few attempts we finally make a connection and immediately get a lot of messages:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Unhandled code 0x13
+</span></span><span style="display:flex;"><span>Unhandled code 0x18
+</span></span><span style="display:flex;"><span>Unhandled code 0x18
+</span></span></code></pre></div><p>These messages are not from the eth protocol, and we will handle them in the next post.</p>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    ©
+    
+      2019 -
+    
+    2022
+     Bouke Stam 
+    ·
+    
+    Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+      
+      <script src="/js/coder.min.8fb86376a16e684af472a329aef502dbebcfab65ce264e9750d144912947c602.js" integrity="sha256-j7hjdqFuaEr0cqMprvUC2&#43;vPq2XOJk6XUNFEkSlHxgI="></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>

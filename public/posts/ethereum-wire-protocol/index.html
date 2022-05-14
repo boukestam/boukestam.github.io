@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+
+    
+      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self'; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdn.jsdelivr.net/; prefetch-src 'self'; connect-src 'self' https://www.google-analytics.com;">
+
+    
+
+    <meta name="author" content="Bouke Stam">
+    <meta name="description" content="Explanation of the Ethereum Wire Protocol">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Ethereum Wire Protocol"/>
+<meta name="twitter:description" content="Explanation of the Ethereum Wire Protocol"/>
+
+    <meta property="og:title" content="Ethereum Wire Protocol" />
+<meta property="og:description" content="Explanation of the Ethereum Wire Protocol" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://boukestam.github.io/posts/ethereum-wire-protocol/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-01-24T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-01-24T00:00:00+00:00" />
+
+
+
+    <title>
+  Ethereum Wire Protocol · Technistuff
+</title>
+
+    
+      <link rel="canonical" href="https://boukestam.github.io/posts/ethereum-wire-protocol/">
+    
+
+    <link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.d9fddbffe6f27e69985dc5fe0471cdb0e57fbf4775714bc3d847accb08f4a1f6.css" integrity="sha256-2f3b/&#43;byfmmYXcX&#43;BHHNsOV/v0d1cUvD2Eesywj0ofY=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="/css/coder-dark.min.002ee2378e14c7a68f1f0a53d9694ed252090987c4e768023fac694a4fc5f793.css" integrity="sha256-AC7iN44Ux6aPHwpT2WlO0lIJCYfE52gCP6xpSk/F95M=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+    <meta name="generator" content="Hugo 0.98.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="preload-transitions colorscheme-auto">
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Technistuff
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/projects/">Projects</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/contact/">Contact me</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://boukestam.github.io/posts/ethereum-wire-protocol/">
+              Ethereum Wire Protocol
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime="2022-01-24T00:00:00Z">
+                January 24, 2022
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              4-minute read
+            </span>
+          </div>
+          
+          
+          <div class="tags">
+  <i class="fa fa-tag" aria-hidden="true"></i>
+    <span class="tag">
+      <a href="/tags/ethereum/">ethereum</a>
+    </span></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <p>The <a href="https://github.com/ethereum/devp2p/blob/master/caps/eth.md">ethereum wire protocol</a> is the build on top of the RLPx protocol.
+It&rsquo;s messages are offset by 0x10 (right after the RLPx builtin messages).
+There are 3 main functionalities in the protocol:</p>
+<ul>
+<li>transaction exchange</li>
+<li>block propagation</li>
+<li>chain synchronization</li>
+</ul>
+<p>We will start by focusing on the transaction exchange and block propagation.
+These parts relay new transactions and blocks troughout the network.
+By doing this first, we can already be a helpful node while we are synchronizing (downloading) the chain.</p>
+<h3 id="status-message">
+  Status message
+  <a class="heading-link" href="#status-message">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>The protocol starts off with both peers sending a status messages (0x00) to the other peer.
+The status message contains:</p>
+<ul>
+<li>protocol version (latest is 66)</li>
+<li>chain id (e.g. 1 for mainnet, 4 for rinkeby testnet)</li>
+<li>total difficulty of our chain</li>
+<li>hash of latest block of our chain</li>
+<li>hash of the genesis block</li>
+<li>hash of the current fork</li>
+<li>blocknumber of the next fork</li>
+</ul>
+<p>Since we don&rsquo;t have not downloaded any blocks yet, our current block is the <a href="https://etherscan.io/block/0">genesis block</a>.
+The current fork at the time of writing is &lsquo;Arrow Glacier&rsquo;.
+The code to send the status message looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">this</span>.send(peer, 0x00, rlp.encode([
+</span></span><span style="display:flex;"><span>  intToBuffer(66),  <span style="font-style:italic">// protocol version
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>  intToBuffer(1),   <span style="font-style:italic">// chain id
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>  intToBuffer(17179869184), <span style="font-style:italic">// genesis total difficulty
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>  Buffer.<span style="font-weight:bold">from</span>(<span style="font-style:italic">&#39;d4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3&#39;</span>, <span style="font-style:italic">&#39;hex&#39;</span>), <span style="font-style:italic">// genesis hash
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>  Buffer.<span style="font-weight:bold">from</span>(<span style="font-style:italic">&#39;d4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3&#39;</span>, <span style="font-style:italic">&#39;hex&#39;</span>), <span style="font-style:italic">// genesis hash
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>  [
+</span></span><span style="display:flex;"><span>    Buffer.<span style="font-weight:bold">from</span>(<span style="font-style:italic">&#39;20c327fc&#39;</span>, <span style="font-style:italic">&#39;hex&#39;</span>), <span style="font-style:italic">// arrowGlacier hash
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>    Buffer.alloc(0) <span style="font-style:italic">// unknown block for merge fork
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>  ]
+</span></span><span style="display:flex;"><span>]));
+</span></span></code></pre></div><p>When we receive their status message, we can determine if the other peer uses the same protocol version, chain id and fork.
+If they don&rsquo;t, we immediately disconnect:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">if</span> (code === 0x00) { <span style="font-style:italic">// status
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>  <span style="font-weight:bold">const</span> [version, networkId, totalDifficulty, blockHash, genesis, forkId] = body;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">if</span> (bufferToInt(version) !== 66 || bufferToInt(networkId) !== 1) {
+</span></span><span style="display:flex;"><span>    peer.disconnect(0x10);
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>If they do, we set their status to verified.</p>
+<h3 id="transaction-pool">
+  Transaction pool
+  <a class="heading-link" href="#transaction-pool">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>Every node is expected to keep track of a pool of pending transactions.
+Right after the status message is received, each node sends the hashes of it&rsquo;s pooled transactions to the other node.
+Whenever new transaction hashes are received, we need to &lsquo;forward&rsquo; them to all nodes that don&rsquo;t know about it.
+Also, we need to retrieve the actual transaction information.
+To know which nodes know about which transactions, we also keep a record of all exchanged transaction hashes for each node.</p>
+<p>Let&rsquo;s start of by creating the data structures for keeping the pool of hashes and the hashes per peer:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">const</span> transactionHashes = <span style="font-weight:bold">new</span> Set&lt;<span style="font-weight:bold">string</span>&gt;();
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">const</span> hashesByPeer = <span style="font-weight:bold">new</span> Map&lt;<span style="font-weight:bold">string</span><span style="">,</span> Set<span style="">&lt;</span>string&gt;&gt;();
+</span></span></code></pre></div><p>Then we need to handle the incoming transaction hashes message by extracting the hashes and converting them to strings to use in the data structures:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">if</span> (code === 0x08) { <span style="font-style:italic">// new pooled transaction hashes
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>  <span style="font-weight:bold">const</span> hashes = body <span style="font-weight:bold">as</span> Buffer[];
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> hashStrings = body.map(buffer =&gt; buffer.toString(<span style="font-style:italic">&#39;hex&#39;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">this</span>.broadcast(peer, <span style="font-weight:bold">this</span>.transactionHashes, hashStrings, hashes);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>In the broadcast function we need to add the hash to the pool and then send the message to all peers that don&rsquo;t already know of this hash:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span>broadcast (<span style="font-weight:bold">from</span>: RLPxPeer, <span style="font-weight:bold">set</span>: Set&lt;<span style="font-weight:bold">string</span>&gt;, hashStrings: <span style="">string</span>[], bodies: <span style="">any</span>[]) {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> peerPool = <span style="font-weight:bold">this</span>.hashesByPeer.<span style="font-weight:bold">get</span>(<span style="font-weight:bold">from</span>.idString());
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">for</span> (<span style="font-weight:bold">const</span> hash <span style="font-weight:bold">of</span> hashStrings) {
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">set</span>.add(hash);
+</span></span><span style="display:flex;"><span>    peerPool.add(hash);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">for</span> (<span style="font-weight:bold">const</span> broadcastPeer <span style="font-weight:bold">of</span> <span style="font-weight:bold">this</span>.peers) {
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">if</span> (broadcastPeer === <span style="font-weight:bold">from</span>) <span style="font-weight:bold">continue</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">const</span> broadcastPeerPool = <span style="font-weight:bold">this</span>.hashesByPeer.<span style="font-weight:bold">get</span>(broadcastPeer.idString());
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">const</span> broadcastHashes = bodies.filter((v, i) =&gt; broadcastPeerPool.has(hashStrings[i]));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">this</span>.send(broadcastPeer, 0x08, rlp.encode(broadcastHashes));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">for</span> (<span style="font-weight:bold">const</span> hash <span style="font-weight:bold">of</span> hashStrings) broadcastPeerPool.add(hash);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>We also need to send all pooled transactions whenever a new connection is made.
+According to the documentation, the maximum amount of hashes per message is 4096.
+So we need to split the hashes into chunks and send the chunks one by one:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">const</span> hashes = <span style="font-weight:bold">this</span>.transactionHashes.values();
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">let</span> chunk = [];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">for</span> (<span style="font-weight:bold">const</span> hash <span style="font-weight:bold">of</span> hashes) {
+</span></span><span style="display:flex;"><span>  chunk.push(Buffer.<span style="font-weight:bold">from</span>(hash, <span style="font-style:italic">&#39;hex&#39;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">if</span> (chunk.length === 4096) {
+</span></span><span style="display:flex;"><span>    <span style="font-weight:bold">this</span>.send(peer, 0x08, rlp.encode(chunk));
+</span></span><span style="display:flex;"><span>    chunk = [];
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">if</span> (chunk.length &gt; 0) <span style="font-weight:bold">this</span>.send(peer, 0x08, rlp.encode(chunk));
+</span></span></code></pre></div><h3 id="block-propagation">
+  Block propagation
+  <a class="heading-link" href="#block-propagation">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>Block propagation is basically the same as transaction exchange, but with blocks.
+When a new block is found, it is propagated throughout the network using the &lsquo;New Block Hashes&rsquo; message (0x01).
+When we receive new blocks, we need to send it to all peers that don&rsquo;t know of this block yet.
+We can reuse the broadcast method for this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">if</span> (code === 0x01) { <span style="font-style:italic">// new block hashes
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>  <span style="font-weight:bold">const</span> blocks = body <span style="font-weight:bold">as</span> [Buffer, Buffer][];
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> hashStrings = blocks.map(([hash, _]) =&gt; hash.toString(<span style="font-style:italic">&#39;hex&#39;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">this</span>.broadcast(peer, <span style="font-weight:bold">this</span>.blockHashes, hashStrings, blocks);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="improvements">
+  Improvements
+  <a class="heading-link" href="#improvements">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<ul>
+<li>Clean up or limit the transaction pool size so it doesn&rsquo;t get too big</li>
+</ul>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    ©
+    
+      2019 -
+    
+    2022
+     Bouke Stam 
+    ·
+    
+    Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+      
+      <script src="/js/coder.min.8fb86376a16e684af472a329aef502dbebcfab65ce264e9750d144912947c602.js" integrity="sha256-j7hjdqFuaEr0cqMprvUC2&#43;vPq2XOJk6XUNFEkSlHxgI="></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>

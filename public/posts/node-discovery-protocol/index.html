@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+
+    
+      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self'; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdn.jsdelivr.net/; prefetch-src 'self'; connect-src 'self' https://www.google-analytics.com;">
+
+    
+
+    <meta name="author" content="Bouke Stam">
+    <meta name="description" content="How the Ethereum clients discover other nodes">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Node Discovery Protocol"/>
+<meta name="twitter:description" content="How the Ethereum clients discover other nodes"/>
+
+    <meta property="og:title" content="Node Discovery Protocol" />
+<meta property="og:description" content="How the Ethereum clients discover other nodes" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://boukestam.github.io/posts/node-discovery-protocol/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-01-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-01-05T00:00:00+00:00" />
+
+
+
+    <title>
+  Node Discovery Protocol · Technistuff
+</title>
+
+    
+      <link rel="canonical" href="https://boukestam.github.io/posts/node-discovery-protocol/">
+    
+
+    <link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.d9fddbffe6f27e69985dc5fe0471cdb0e57fbf4775714bc3d847accb08f4a1f6.css" integrity="sha256-2f3b/&#43;byfmmYXcX&#43;BHHNsOV/v0d1cUvD2Eesywj0ofY=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="/css/coder-dark.min.002ee2378e14c7a68f1f0a53d9694ed252090987c4e768023fac694a4fc5f793.css" integrity="sha256-AC7iN44Ux6aPHwpT2WlO0lIJCYfE52gCP6xpSk/F95M=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+    <meta name="generator" content="Hugo 0.98.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="preload-transitions colorscheme-auto">
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Technistuff
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/projects/">Projects</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/contact/">Contact me</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://boukestam.github.io/posts/node-discovery-protocol/">
+              Node Discovery Protocol
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime="2022-01-05T00:00:00Z">
+                January 5, 2022
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              7-minute read
+            </span>
+          </div>
+          
+          
+          <div class="tags">
+  <i class="fa fa-tag" aria-hidden="true"></i>
+    <span class="tag">
+      <a href="/tags/ethereum/">ethereum</a>
+    </span></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <p>The first step is to actually find some nodes that we can connect to. This process is defined as the <a href="https://github.com/ethereum/devp2p/blob/master/discv4.md">Node Discovery Protocol</a>. The process goes like this:</p>
+<ol>
+<li>Connect to a node with UDP</li>
+<li>Send ping</li>
+<li>Receive pong</li>
+<li>Ask for nodes close to me</li>
+<li>Receive neighbor nodes</li>
+<li>Go back to step 1 for all neighbors until we have enough nodes</li>
+</ol>
+<p>To start this process we need to know at least one node that we can connect with. These starting nodes are called <code>bootstrap nodes</code>. There is a list of them in the <a href="https://github.com/ethereum/go-ethereum/blob/master/params/bootnodes.go">go-ethereum repository</a>. The address for a node in that repo looks this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>&#34;enode://d860a01f9722d78051619d1e2351aba3f43f943f6f00718d1b9baa4101932a1f5011f16bb2b1bb35db20d6fe28fa0bf09636d26a87d31de9ec6203eeedb1f666@18.138.108.67:30303&#34;
+</span></span></code></pre></div><p>The long hex string is the ID of the node. The part after the @ symbol contains the ip address and port. More information about the enode url format can be found <a href="https://eth.wiki/en/fundamentals/enode-url-format">here</a>. According to the Discovery Protocol documentation all nodes have these 4 attributes:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>[ip, udp-port, tcp-port, node-id]
+</span></span></code></pre></div><p>So let&rsquo;s create an interface for that:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">interface</span> Endpoint {
+</span></span><span style="display:flex;"><span>  id: <span style="">string</span>;
+</span></span><span style="display:flex;"><span>  ip: <span style="">string</span>;
+</span></span><span style="display:flex;"><span>  udpPort: <span style="">number</span>;
+</span></span><span style="display:flex;"><span>  tcpPort: <span style="">number</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Let&rsquo;s also write a function to parse the url into this format:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">function</span> parseEnode (url: <span style="">string</span>): Endpoint {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> [id, endpoint] = url.replace(<span style="font-style:italic">&#39;enode://&#39;</span>, <span style="font-style:italic">&#39;&#39;</span>).split(<span style="font-style:italic">&#39;@&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> [ip, port] = endpoint.split(<span style="font-style:italic">&#39;:&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">return</span> {
+</span></span><span style="display:flex;"><span>    id: <span style="">id</span>,
+</span></span><span style="display:flex;"><span>    ip: <span style="">ip</span>,
+</span></span><span style="display:flex;"><span>    udpPort: <span style="">parseInt</span>(port),
+</span></span><span style="display:flex;"><span>    tcpPort: <span style="">parseInt</span>(port)
+</span></span><span style="display:flex;"><span>  };
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="sending-a-ping-message">
+  Sending a ping message
+  <a class="heading-link" href="#sending-a-ping-message">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>All messages that we want to send have to be wrapped according to the <a href="https://github.com/ethereum/devp2p/blob/master/discv4.md#wire-protocol">Wire Protocol</a>:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>packet = packet-header || packet-data
+</span></span><span style="display:flex;"><span>packet-header = hash || signature || packet-type
+</span></span><span style="display:flex;"><span>hash = keccak256(signature || packet-type || packet-data)
+</span></span><span style="display:flex;"><span>signature = sign(packet-type || packet-data)
+</span></span></code></pre></div><p>Looking at this, there are two things we need to look up: keccak256 and the sign function. Keccak256 is the hashing function used by Ethereum, it&rsquo;s in the same family as SHA hashing algorithms. We can put any amount of data in, and out comes a unique byte sequence. After some searching through the documentation, the signature turns out to be a ECDSA signature using a secp256k1 curve. This is all starting to look way too complicated, so this is where I need to bring in some libaries.</p>
+<p>Even though my goal is to use as few libraries as possible, at this point I&rsquo;m getting into math that is so difficult that it would probably kill the whole project right here if I try to take it on. At some point I might come back to this to try and figure it out for myself, but for now we just use a library to keep going.</p>
+<p>I added the <a href="https://www.npmjs.com/package/secp256k1">secp256k1</a> and <a href="https://www.npmjs.com/package/keccak256">keccak256</a> packages to the project and this is the function I wrote:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">function</span> encodePacket (privateKey: <span style="">Buffer</span>, <span style="font-weight:bold">type</span>: <span style="">number</span>, packetData: <span style="">Buffer</span>): Buffer {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> packetType = Buffer.<span style="font-weight:bold">from</span>([<span style="font-weight:bold">type</span>]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> sig = secp256k1.ecdsaSign(
+</span></span><span style="display:flex;"><span>    keccak256(Buffer.concat([packetType, packetData])), 
+</span></span><span style="display:flex;"><span>    privateKey
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> signature = Buffer.concat([ sig.signature, Buffer.<span style="font-weight:bold">from</span>([sig.recid])]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> hash = keccak256(signature, packetType, packetData);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> packetHeader = Buffer.concat([hash, signature, packetType]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">return</span> Buffer.concat([packetHeader, packetData]);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Now that we have that ready, let&rsquo;s take look at the ping packet:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>packet-data = [version, from, to, expiration, enr-seq ...]
+</span></span><span style="display:flex;"><span>version = 4
+</span></span><span style="display:flex;"><span>from = [sender-ip, sender-udp-port, sender-tcp-port]
+</span></span><span style="display:flex;"><span>to = [recipient-ip, recipient-udp-port, 0]
+</span></span></code></pre></div><p>At first I was confused by the square brackets [], but I quickly found out that they refer to RLP encoding. I went head first into this, and it&rsquo;s not too difficult, but enough to put it in a [separate article](RLP Encoding.md). To result of this is that we now have two more functions: rlpEncode and rlpDecode. We also need a function to encode the endpoint as something that we can put in the rlpEncoder:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">function</span> encodeEndpoint (endpoint: <span style="">Endpoint</span>): Buffer[] {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">return</span> [
+</span></span><span style="display:flex;"><span>    ip.toBuffer(endpoint.ip),
+</span></span><span style="display:flex;"><span>    Buffer.<span style="font-weight:bold">from</span>([endpoint.udpPort]),
+</span></span><span style="display:flex;"><span>    Buffer.<span style="font-weight:bold">from</span>([endpoint.tcpPort])
+</span></span><span style="display:flex;"><span>  ];
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Then we can create the expiration timestamp and RLP encode the version number, endpoints and timestamp to create our ping message.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">const</span> expiration = Buffer.allocUnsafe(4);
+</span></span><span style="display:flex;"><span>expiration.writeUInt32BE(Date.now() / 1000 + 60); <span style="font-style:italic">// Timeout after 60 seconds
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">const</span> pingData = rlpEncode([
+</span></span><span style="display:flex;"><span>  Buffer.<span style="font-weight:bold">from</span>([0x04]),
+</span></span><span style="display:flex;"><span>  encodeEndpoint(initiatorEndpoint),
+</span></span><span style="display:flex;"><span>  encodeEndpoint(receiverEndpoint), 
+</span></span><span style="display:flex;"><span>  expiration
+</span></span><span style="display:flex;"><span>]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">const</span> ping = encodePacket(initiatorPrivate, 0x01, pingData);
+</span></span></code></pre></div><p>We can then send the ping message to the node using a UDP socket:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">const</span> client = udp.createSocket(<span style="font-style:italic">&#39;udp4&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>client.on(<span style="font-style:italic">&#39;message&#39;</span>, <span style="font-weight:bold">function</span>(msg, info) {
+</span></span><span style="display:flex;"><span>  printBytes(<span style="font-style:italic">&#39;Data from server&#39;</span>, msg);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>client.send(ping, receiverEndpoint.udpPort, receiverEndpoint.ip, <span style="font-weight:bold">function</span>(error) {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">if</span>(error) client.close();
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">else</span> console.log(<span style="font-style:italic">&#39;Ping sent&#39;</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>When we now run the program, this is what we get:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Ping sent
+</span></span><span style="display:flex;"><span>Data from server 150 &lt;Buffer 01 2b 50 04 6e df d2 3b bc 37 f2 dc 69 39 75 0b 1e f7 fa 76 4a 80 80 ab 77 69 85 eb b8 e8 95 cf 60 6d 99 90 de 0c 5e c9 23 59 d0 a0 18 de 83 a2 63 15 ... 100 more bytes&gt;
+</span></span><span style="display:flex;"><span>Data from server 130 &lt;Buffer 3c fc 00 b7 4f e6 9f b7 d8 a2 88 24 5a 1d 53 be 6f 16 d1 f7 fa 1f 5d ab e1 1c 67 1b 5e 13 1d 6d 91 e6 95 f2 a8 4d a6 ce 9b 86 47 be 8e f3 61 32 a1 7c ... 80 more bytes&gt;
+</span></span></code></pre></div><h3 id="receiving-messages">
+  Receiving messages
+  <a class="heading-link" href="#receiving-messages">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>After our ping message, the node sends two messages back to us. Since we haven&rsquo;t made any way to decode messages, we have no idea what they are&hellip; Presumably one of them is the pong packet that we want to receive. So let&rsquo;s build a function to decode messages.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">function</span> decodePacket (data: <span style="">Buffer</span>) {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> hash = keccak256(data.slice(32));
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> givenHash = data.slice(0, 32);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">if</span> (!hash.equals(givenHash)) <span style="font-weight:bold">throw</span> <span style="font-weight:bold">new</span> Error(<span style="font-style:italic">&#39;Invalid hash&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> typeAndData = data.slice(97);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> packetType = typeAndData[0];
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> packetData = typeAndData.slice(1);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> sighash = keccak256(typeAndData);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> signature = data.slice(32, 96);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> recoverId = data[96];
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> publicKey = secp256k1.ecdsaRecover(signature, recoverId, sighash);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">return</span> {packetType, packetData, hash, publicKey};
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>If we decode the messages and print out the type we get this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Ping sent
+</span></span><span style="display:flex;"><span>Package type 2 // pong
+</span></span><span style="display:flex;"><span>Package type 1 // ping
+</span></span></code></pre></div><p>Apparently the node first replies with a pong message and then also sends us a ping. Looking at the documentation this actually makes sense:</p>
+<blockquote>
+<p>If no communication with the sender has occurred within the last 12h, a ping should be sent in addition to pong in order to receive an endpoint proof.</p>
+</blockquote>
+<h3 id="sending-a-pong-message">
+  Sending a pong message
+  <a class="heading-link" href="#sending-a-pong-message">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>We need to respond to the ping message in order to be verified by the node and be able to get the neighbors. The pong message is very simple:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>packet-data = [to, ping-hash, expiration, enr-seq, ...]
+</span></span></code></pre></div><p>The <code>ping-hash</code> is the hash of the ping message we are responding to. By checking the packet type we can respond to the ping messages with a pong message:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">if</span> (packet.packetType === 0x01) {
+</span></span><span style="display:flex;"><span>  <span style="font-style:italic">// Ping
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">await</span> send(
+</span></span><span style="display:flex;"><span>    encodePacket(initiatorPrivate, 0x02, rlpEncode([
+</span></span><span style="display:flex;"><span>      encodeEndpoint(receiverEndpoint),
+</span></span><span style="display:flex;"><span>      packet.hash,
+</span></span><span style="display:flex;"><span>      encodeExpiration()
+</span></span><span style="display:flex;"><span>    ]))
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="asking-for-neighbor-nodes">
+  Asking for neighbor nodes
+  <a class="heading-link" href="#asking-for-neighbor-nodes">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>As you can see I also wrote a helper method to make sending the message much easier. After the pong message, we can send the FindNode message:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>packet-data = [target, expiration, ...]
+</span></span></code></pre></div><p>In the documentation it says that the target is supposed to be the 65-byte secp256k1 public key. But after getting no response and debugging for an hour, I finally found out it&rsquo;s actually supposed to be the 64-byte ID (the public key without 0x04). So this is the final version:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">await</span> send(
+</span></span><span style="display:flex;"><span>  encodePacket(initiatorPrivate, 0x03, rlpEncode([
+</span></span><span style="display:flex;"><span>    initiatorId,
+</span></span><span style="display:flex;"><span>    encodeExpiration()
+</span></span><span style="display:flex;"><span>  ]))
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><p>We can get the response like this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">if</span> (packet.packetType === 0x04) {
+</span></span><span style="display:flex;"><span>  <span style="font-style:italic">// Neighbors
+</span></span></span><span style="display:flex;"><span><span style="font-style:italic"></span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">const</span> [nodes, expiration] = data <span style="font-weight:bold">as</span> [Buffer[][], Buffer];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">for</span> (<span style="font-weight:bold">const</span> endpoint <span style="font-weight:bold">of</span> nodes) {
+</span></span><span style="display:flex;"><span>    console.log(<span style="font-style:italic">`IP </span><span style="font-weight:bold;font-style:italic">${</span>endpoint[0].join(<span style="font-style:italic">&#39;.&#39;</span>)<span style="font-weight:bold;font-style:italic">}</span><span style="font-style:italic"> UDP </span><span style="font-weight:bold;font-style:italic">${</span>bufferToNumber(endpoint[1])<span style="font-weight:bold;font-style:italic">}</span><span style="font-style:italic"> TCP </span><span style="font-weight:bold;font-style:italic">${</span>bufferToNumber(endpoint[2])<span style="font-weight:bold;font-style:italic">}</span><span style="font-style:italic">`</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The output is this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>IP 13.229.120.227 UDP 30311 TCP 30311
+</span></span><span style="display:flex;"><span>IP 162.55.93.53 UDP 32631 TCP 30303
+</span></span><span style="display:flex;"><span>IP 136.243.49.136 UDP 30303 TCP 30303
+</span></span><span style="display:flex;"><span>IP 54.199.181.188 UDP 30303 TCP 30303
+</span></span><span style="display:flex;"><span>IP 108.52.155.208 UDP 30303 TCP 30303
+</span></span><span style="display:flex;"><span>IP 65.108.7.112 UDP 30303 TCP 30303
+</span></span><span style="display:flex;"><span>IP 45.32.37.192 UDP 30303 TCP 30303
+</span></span><span style="display:flex;"><span>IP 35.181.104.81 UDP 30303 TCP 30303
+</span></span><span style="display:flex;"><span>IP 116.203.189.155 UDP 30303 TCP 30303
+</span></span><span style="display:flex;"><span>IP 65.21.89.101 UDP 21219 TCP 21219
+</span></span><span style="display:flex;"><span>IP 161.97.151.215 UDP 28657 TCP 28657
+</span></span><span style="display:flex;"><span>IP 217.79.250.90 UDP 30311 TCP 30311
+</span></span><span style="display:flex;"><span>IP 3.250.36.7 UDP 30311 TCP 30311
+</span></span><span style="display:flex;"><span>IP 135.181.205.56 UDP 30303 TCP 30303
+</span></span><span style="display:flex;"><span>IP 212.102.36.241 UDP 5050 TCP 5050
+</span></span><span style="display:flex;"><span>IP 144.91.112.41 UDP 30303 TCP 30303
+</span></span></code></pre></div><p>We can now use these nodes to continue looking for more nodes until we have enough. But what is enough and how will we store these nodes? These questions will be answered in the next part in the series.</p>
+<h3 id="improvements">
+  Improvements
+  <a class="heading-link" href="#improvements">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<ul>
+<li>Periodically clean up unresponsive nodes</li>
+</ul>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    ©
+    
+      2019 -
+    
+    2022
+     Bouke Stam 
+    ·
+    
+    Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+      
+      <script src="/js/coder.min.8fb86376a16e684af472a329aef502dbebcfab65ce264e9750d144912947c602.js" integrity="sha256-j7hjdqFuaEr0cqMprvUC2&#43;vPq2XOJk6XUNFEkSlHxgI="></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>

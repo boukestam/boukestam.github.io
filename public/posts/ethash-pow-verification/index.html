@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+
+    
+      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self'; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdn.jsdelivr.net/; prefetch-src 'self'; connect-src 'self' https://www.google-analytics.com;">
+
+    
+
+    <meta name="author" content="Bouke Stam">
+    <meta name="description" content="How does Ethereum verify that blocks are correct?">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Ethash PoW verification"/>
+<meta name="twitter:description" content="How does Ethereum verify that blocks are correct?"/>
+
+    <meta property="og:title" content="Ethash PoW verification" />
+<meta property="og:description" content="How does Ethereum verify that blocks are correct?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://boukestam.github.io/posts/ethash-pow-verification/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-02-11T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-02-11T00:00:00+00:00" />
+
+
+
+    <title>
+  Ethash PoW verification · Technistuff
+</title>
+
+    
+      <link rel="canonical" href="https://boukestam.github.io/posts/ethash-pow-verification/">
+    
+
+    <link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.d9fddbffe6f27e69985dc5fe0471cdb0e57fbf4775714bc3d847accb08f4a1f6.css" integrity="sha256-2f3b/&#43;byfmmYXcX&#43;BHHNsOV/v0d1cUvD2Eesywj0ofY=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="/css/coder-dark.min.002ee2378e14c7a68f1f0a53d9694ed252090987c4e768023fac694a4fc5f793.css" integrity="sha256-AC7iN44Ux6aPHwpT2WlO0lIJCYfE52gCP6xpSk/F95M=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+    <meta name="generator" content="Hugo 0.98.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="preload-transitions colorscheme-auto">
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Technistuff
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/projects/">Projects</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/contact/">Contact me</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://boukestam.github.io/posts/ethash-pow-verification/">
+              Ethash PoW verification
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime="2022-02-11T00:00:00Z">
+                February 11, 2022
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              4-minute read
+            </span>
+          </div>
+          
+          
+          <div class="tags">
+  <i class="fa fa-tag" aria-hidden="true"></i>
+    <span class="tag">
+      <a href="/tags/ethereum/">ethereum</a>
+    </span></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <p>The concensus algorithm used for Ethereum is called Ethash.
+Ethash is a proof of work (PoW) algorithm, modified from the Bitcoin PoW algorithm.
+The algorithm is needed to secure the blockchain, by making it very difficult to change it.
+There is a very good <a href="https://medium.com/coinmonks/simply-explained-why-is-proof-of-work-required-in-bitcoin-611b143fc3e0">blog post</a> that gives a simple explanation of why proof of work is needed.</p>
+<h2 id="design">
+  Design
+  <a class="heading-link" href="#design">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h2>
+<p>Ethash is designed to make is very easy to verify if a proof is correct.
+It&rsquo;s also designed so that mining is not easy to optimize, and running it on your own computer should not be too much slower than running it on specialized hardware.
+This is done by making the algorithm very memory (GPU RAM / VRAM) intensive, and there is not much difference in speed between consumer RAM and specialized RAM in GPU&rsquo;s.
+This property is very important, because it decreases the centralization of the network, by allowing more people to participate.</p>
+<p>See <a href="https://eth.wiki/concepts/ethash/design-rationale">Ethash Design Rationale</a> for more details on this.</p>
+<h3 id="the-algorithm">
+  The algorithm
+  <a class="heading-link" href="#the-algorithm">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>The PoW algorithm works as follows:</p>
+<ul>
+<li>create a seed, based on the current epoch (a new epoch start every 30,000 blocks)</li>
+<li>create a cache filled with pseudo random data, from the seed (the same for everyone)</li>
+<li>mix the block header and a random nonce together with items from cache to create a &lsquo;mix digest&rsquo;</li>
+<li>if the answer is not correct, we increase the nonce and try again (lots of times)</li>
+<li>if the mix digest is correct, we can send out our proof and collect a mining reward</li>
+</ul>
+<p>This mix digest, can then be easily verified by anyone, by taking the block header and nonce and doing the same process to see if we get the same mix digest.</p>
+<h3 id="implementation">
+  Implementation
+  <a class="heading-link" href="#implementation">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>For exact details you can visit the <a href="https://eth.wiki/en/concepts/ethash/ethash">Ethash page on the ethereum wiki</a>.
+I used the python code in the wiki to create a TypeScript implementation, and ended up with the following methods:</p>
+<ul>
+<li>getSeed (blockNumber: number)</li>
+<li>getCacheSize (blockNumber: number)</li>
+<li>getFullSize (blockNumber: number)</li>
+<li>generateCache (cacheSize: number, seed: Buffer): Buffer[]</li>
+<li>hashimoto(cache: Buffer[], header: Buffer, nonce: Buffer, fullSize: number)</li>
+</ul>
+<p>We can then verify a block like this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">const</span> seed = getSeed(blockNumber);
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">const</span> cacheSize = getCacheSize(blockNumber);
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">const</span> fullSize = getFullSize(blockNumber);
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">const</span> cache = generateCache(cacheSize, cache);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">const</span> {blockNonce, difficulty, mixDigest: <span style="">headerMixDigest</span>} = block.parsedHeader();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">const</span> {mixDigest, result} = hashimoto(cache, block.powHash(), block.blockNonce(), fullSize);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">const</span> verified = block.mixDigest().equals(mixDigest) &amp;&amp; bufferToBigInt(result) &lt; (2n ** 256n) / block.difficulty();
+</span></span></code></pre></div><p>As you can see, we also need to check if the result of the hashimoto algorithm is within the current difficulty.
+This difficulty is adjusted over time to keep the average block time at 13 seconds.
+This graph shows the difficulty over the entire lifespan of the ethereum network:</p>
+<p><img src="/images/difficulty.png" alt="PoW Difficulty"></p>
+<h3 id="performance">
+  Performance
+  <a class="heading-link" href="#performance">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>Creating the cache is the slowest part and takes between 15 and 45 seconds, depending on the cache size.
+A few years ago the cache size was much smaller (around 16MB), but it has since grown to over 45MB.
+Luckily though, this only has to be done once every epoch (30,000 blocks).
+Also, since the cache is only dependent on the epoch number, this can be generated in advance.
+By using worker threads in Node.js, we can even do this in parallel, without blocking the current thread.</p>
+<p>Verifying blocks takes on average 45ms per block.
+This seems fast, but quickly adds up when syncing the blockchain.
+It takes around 22 minutes to verify 30,000 blocks.
+And with around 15,000,000 blocks at the time of writing, this adds up to 187.5 hours.
+Doing this on several threads while synchronizing could save a lot of time and might be worth implementing.</p>
+<h3 id="improvements">
+  Improvements
+  <a class="heading-link" href="#improvements">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>There is only a finite set of possible combinations that can be grabbed from the cache.
+This set is called the dataset in the documentation, and currently has a size of about 4GB.
+If you where to precalculate this set, it would be much quicker to do the verification or mining.
+The dataset takes a really long time to generate though, and according to my calculations, it&rsquo;s not worth it for just the verification.
+When implementing the mining algorithm, this might be worth looking into.</p>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    ©
+    
+      2019 -
+    
+    2022
+     Bouke Stam 
+    ·
+    
+    Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+      
+      <script src="/js/coder.min.8fb86376a16e684af472a329aef502dbebcfab65ce264e9750d144912947c602.js" integrity="sha256-j7hjdqFuaEr0cqMprvUC2&#43;vPq2XOJk6XUNFEkSlHxgI="></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ethereum on Technistuff</title>
+    <link>https://boukestam.github.io/tags/ethereum/</link>
+    <description>Recent content in ethereum on Technistuff</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 14 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://boukestam.github.io/tags/ethereum/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ethereum Virtual Machine</title>
+      <link>https://boukestam.github.io/posts/ethereum-virtual-machine/</link>
+      <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://boukestam.github.io/posts/ethereum-virtual-machine/</guid>
+      <description>Intrinsic gas    Every transaction has an up-front gas fee, also called intrinsic gas. This amount needs to be paid upfront and is calculated like this:
+ 21000 by default for each byte in the data, 4 if it&amp;rsquo;s zero, 16 if it&amp;rsquo;s non-zero 32000 if this transaction creates a contract (after Homestead update, block 1,150,000)  The Berlin update also introduced a new transaction type, that can specify the accounts and storage keys that the transaction plans to access.</description>
+    </item>
+    
+    <item>
+      <title>Ethash PoW verification</title>
+      <link>https://boukestam.github.io/posts/ethash-pow-verification/</link>
+      <pubDate>Fri, 11 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://boukestam.github.io/posts/ethash-pow-verification/</guid>
+      <description>The concensus algorithm used for Ethereum is called Ethash. Ethash is a proof of work (PoW) algorithm, modified from the Bitcoin PoW algorithm. The algorithm is needed to secure the blockchain, by making it very difficult to change it. There is a very good blog post that gives a simple explanation of why proof of work is needed.
+Design    Ethash is designed to make is very easy to verify if a proof is correct.</description>
+    </item>
+    
+    <item>
+      <title>Merkle Patricia Trie</title>
+      <link>https://boukestam.github.io/posts/merkle-patricia-trie/</link>
+      <pubDate>Mon, 07 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://boukestam.github.io/posts/merkle-patricia-trie/</guid>
+      <description>A Merkle Patricia Trie (just called trie from now on) is a data strcture that functions as a key value store, but has two important properties:
+ simple and efficient verification of data integrity proof that the trie contains a key/value pair  The trie structure accomplishes this by creating a branching data structure. By starting at the root, then following the branches while using the key to select which branches to take, you will end up at the value.</description>
+    </item>
+    
+    <item>
+      <title>Chain synchronization</title>
+      <link>https://boukestam.github.io/posts/chain-synchronization/</link>
+      <pubDate>Wed, 02 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://boukestam.github.io/posts/chain-synchronization/</guid>
+      <description>Chain synchronization is the process of downloading blocks from other peers in the network. After the status message is sent, each node checks how long the other&amp;rsquo;s chain is. If one node has a shorter chain than the other, it starts downloading the missing blocks.
+What is a block?    An ethereum block is basically a container that holds a bundle of transactions that is to be executed. The number of transactions is limited by the block gas limit.</description>
+    </item>
+    
+    <item>
+      <title>Ethereum Wire Protocol</title>
+      <link>https://boukestam.github.io/posts/ethereum-wire-protocol/</link>
+      <pubDate>Mon, 24 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://boukestam.github.io/posts/ethereum-wire-protocol/</guid>
+      <description>The ethereum wire protocol is the build on top of the RLPx protocol. It&amp;rsquo;s messages are offset by 0x10 (right after the RLPx builtin messages). There are 3 main functionalities in the protocol:
+ transaction exchange block propagation chain synchronization  We will start by focusing on the transaction exchange and block propagation. These parts relay new transactions and blocks troughout the network. By doing this first, we can already be a helpful node while we are synchronizing (downloading) the chain.</description>
+    </item>
+    
+    <item>
+      <title>RLPx Transport Protocol</title>
+      <link>https://boukestam.github.io/posts/rlpx-transport-protocol/</link>
+      <pubDate>Wed, 19 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://boukestam.github.io/posts/rlpx-transport-protocol/</guid>
+      <description>I think the easiest way to start is by just trying to connect to another node and seeing what data we get sent. We&amp;rsquo;ll pick it up from there.
+Through the Ethereum documentation I manage to find a document that explains the process of connecting to another node. The protocol is called the RLPx Transport protocol. It&amp;rsquo;s TCP-based and starts out a handshake. After the handshake we send and receive a hello message that communicates some information about the version and capabilities.</description>
+    </item>
+    
+    <item>
+      <title>Kademlia Table</title>
+      <link>https://boukestam.github.io/posts/kademlia-table/</link>
+      <pubDate>Fri, 14 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://boukestam.github.io/posts/kademlia-table/</guid>
+      <description>In the previous part we found out how to connect to nodes, send ping and pong messages and finally get a list of neighbor nodes. Now we need to continue this process until we have enough neighbors. But how much is enough? After reading the documentation I found out that we need to use a Kademlia Table.
+The table is actually more like a tree. We start of by calculating the distance between two nodes like this:</description>
+    </item>
+    
+    <item>
+      <title>RLP Encoding</title>
+      <link>https://boukestam.github.io/posts/rlp-encoding/</link>
+      <pubDate>Wed, 12 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://boukestam.github.io/posts/rlp-encoding/</guid>
+      <description>RLP Encoding is an way to serialize and deserialize lists of data. The Ethereum Wiki contains some excellent information about this. The page talks a lot about strings, but in practice that usually means a byte array, not a text string. This was a bit confusing for me at first. The encoding of a byte array works like this:
+ if it is a single byte with a value between 0x00 and 0x7f, we just append it if it is 0-55 bytes long, we append 0x80 + length and then the bytes if it is &amp;gt; 55 bytes, we append 0xb7 then number of bytes in the length of the bytes, the length and after that the bytes  The encoding of a list works like this:</description>
+    </item>
+    
+    <item>
+      <title>Node Discovery Protocol</title>
+      <link>https://boukestam.github.io/posts/node-discovery-protocol/</link>
+      <pubDate>Wed, 05 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://boukestam.github.io/posts/node-discovery-protocol/</guid>
+      <description>The first step is to actually find some nodes that we can connect to. This process is defined as the Node Discovery Protocol. The process goes like this:
+ Connect to a node with UDP Send ping Receive pong Ask for nodes close to me Receive neighbor nodes Go back to step 1 for all neighbors until we have enough nodes  To start this process we need to know at least one node that we can connect with.</description>
+    </item>
+    
+    <item>
+      <title>Ethereum Deepdive</title>
+      <link>https://boukestam.github.io/posts/ethereum-deepdive/</link>
+      <pubDate>Tue, 04 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://boukestam.github.io/posts/ethereum-deepdive/</guid>
+      <description>This is the first post in a series on writing an Ethereum node from scratch. I want to do this because I&amp;rsquo;m the kind of person that understands things by trying to recreate it for myself. For that reason I decided to finally tackle one of the biggest mysteries to me.
+I&amp;rsquo;ve been working as a blockchain developer for 1.5 years now, but honestly it&amp;rsquo;s inner workings are still a big mystery to me.</description>
+    </item>
+    
+  </channel>
+</rss>

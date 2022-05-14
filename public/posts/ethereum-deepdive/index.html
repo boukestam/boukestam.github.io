@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+
+    
+      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self'; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdn.jsdelivr.net/; prefetch-src 'self'; connect-src 'self' https://www.google-analytics.com;">
+
+    
+
+    <meta name="author" content="Bouke Stam">
+    <meta name="description" content="A deepdive into the inner workings of the Ethereum protocol">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Ethereum Deepdive"/>
+<meta name="twitter:description" content="A deepdive into the inner workings of the Ethereum protocol"/>
+
+    <meta property="og:title" content="Ethereum Deepdive" />
+<meta property="og:description" content="A deepdive into the inner workings of the Ethereum protocol" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://boukestam.github.io/posts/ethereum-deepdive/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-01-04T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-01-04T00:00:00+00:00" />
+
+
+
+    <title>
+  Ethereum Deepdive · Technistuff
+</title>
+
+    
+      <link rel="canonical" href="https://boukestam.github.io/posts/ethereum-deepdive/">
+    
+
+    <link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.d9fddbffe6f27e69985dc5fe0471cdb0e57fbf4775714bc3d847accb08f4a1f6.css" integrity="sha256-2f3b/&#43;byfmmYXcX&#43;BHHNsOV/v0d1cUvD2Eesywj0ofY=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="/css/coder-dark.min.002ee2378e14c7a68f1f0a53d9694ed252090987c4e768023fac694a4fc5f793.css" integrity="sha256-AC7iN44Ux6aPHwpT2WlO0lIJCYfE52gCP6xpSk/F95M=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+    <meta name="generator" content="Hugo 0.98.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="preload-transitions colorscheme-auto">
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Technistuff
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/projects/">Projects</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/contact/">Contact me</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://boukestam.github.io/posts/ethereum-deepdive/">
+              Ethereum Deepdive
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime="2022-01-04T00:00:00Z">
+                January 4, 2022
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              3-minute read
+            </span>
+          </div>
+          
+          
+          <div class="tags">
+  <i class="fa fa-tag" aria-hidden="true"></i>
+    <span class="tag">
+      <a href="/tags/ethereum/">ethereum</a>
+    </span></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <p>This is the first post in a series on writing an Ethereum node from scratch. I want to do this because I&rsquo;m the kind of person that understands things by trying to recreate it for myself. For that reason I decided to finally tackle one of the biggest mysteries to me.</p>
+<p>I&rsquo;ve been working as a blockchain developer for 1.5 years now, but honestly it&rsquo;s inner workings are still a big mystery to me. How do nodes talk to each other and collectively come to a consensus? How does all the cryptography actually work? What happens when I store a variable?</p>
+<h3 id="the-goal">
+  The goal
+  <a class="heading-link" href="#the-goal">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>The goal is to learn about all the different aspects that make the Ethereum network work. The goal is <strong>not</strong> to create the most optimized, stable Ethereum node. I will start out creating everything in the most simple way and only optimize and handle errors where needed. Throughout the project I will dive in head-first and try to tackle the hurdles as they come.</p>
+<h3 id="the-plan">
+  The plan
+  <a class="heading-link" href="#the-plan">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>With this project I try to answer all these questions, and hopefully help others who are looking for the answers. This is my plan:</p>
+<ul>
+<li>use Node.js/Typescript as programming language because I am familiar with it</li>
+<li>try to use as few libraries as possible</li>
+<li>use the <a href="https://ethereum.github.io/yellowpaper/paper.pdf">Ethereum Yellow Paper</a> and <a href="https://github.com/ethereum">Ethereum documentation</a> as reference</li>
+<li>start as simple as possible and build out from there</li>
+</ul>
+<p>Some of you might question the decision to use NodeJS and Typescript for this project. But I think it will help me and others understand the code more easily since many people are familiar with it.</p>
+<h3 id="prior-knowledge">
+  Prior knowledge
+  <a class="heading-link" href="#prior-knowledge">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>I already have a vague high-level idea about how the blockchain works. This will definitely steer me in some directions so I think it&rsquo;s good to explain what I already know:</p>
+<ul>
+<li>the EVM (Ethereum Virtual Machine) is the processor at the core of Ethereum</li>
+<li>the EVM processes transactions that interact with smart contracts</li>
+<li>transactions can read or write from a special kind of memory called the &lsquo;state&rsquo;</li>
+<li>transactions are grouped up in blocks</li>
+<li>blocks are chained together in a blockchain and depend on each other</li>
+<li>consensus about which chain is the correct one is reached through a network of nodes</li>
+<li>the nodes talk to each other to share information</li>
+</ul>
+<p>I don&rsquo;t really have any idea how any of this works under the hood though. But looking at this we have basically two ways to start out, at the top of the list (the EVM) or the bottom (the network). I think it&rsquo;s best to start with the network so we can immediately start working with real data and real interactions.</p>
+<h3 id="setup">
+  Setup
+  <a class="heading-link" href="#setup">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>I start the project by <a href="https://nodejs.org/en/download/">downloading Node.js</a>. The installation is really quick and only takes a minute. After that I create a new directory and initialize my project:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --global yarn // if you don&#39;t have it yet
+</span></span><span style="display:flex;"><span>yarn init
+</span></span><span style="display:flex;"><span>yarn add -D typescript
+</span></span><span style="display:flex;"><span>yarn add ts-node
+</span></span><span style="display:flex;"><span>yarn add -D tslib @types/node
+</span></span></code></pre></div><p>I then create a new file called <code>main.ts</code> and put in the following code:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span>console.log(<span style="font-style:italic">&#39;Hello World!&#39;</span>);
+</span></span></code></pre></div><p>I can then run it with <code>ts-node main.ts</code>. Now we can get started on the actual fun stuff!</p>
+<h3 id="chapters">
+  Chapters
+  <a class="heading-link" href="#chapters">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<ol>
+<li><a href="Public%20Key%20Cryptography.md">Public Key Cryptography</a></li>
+<li><a href="Node%20Discovery%20Protocol.md">Node Discovery Protocol</a></li>
+<li><a href="RLP%20Encoding.md">RLP Encoding</a></li>
+<li><a href="Kademlia%20Table.md">Kademlia Table</a></li>
+<li><a href="RLPx%20Transport%20Protocol.md">RLPx Transport Protocol</a></li>
+<li><a href="Ethereum%20Wire%20Protocol.md">Ethereum Wire Protocol</a></li>
+<li><a href="Chain%20synchronization.md">Chain synchronization</a></li>
+<li><a href="Chain%20storage.md">Chain storage</a></li>
+<li><a href="Merkle%20Patricia%20Trie.md">Merkle Patricia Tree</a></li>
+<li><a href="Ethash%20PoW%20verification.md">Ethash PoW verification</a></li>
+<li><a href="Ethereum%20Virtual%20Machine.md">Ethereum Virtual Machine</a></li>
+<li><a href="JSON-RPC%20API.md">JSON-RPC API</a></li>
+<li><a href="Ethash%20Mining.md">Ethash Mining</a></li>
+</ol>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    ©
+    
+      2019 -
+    
+    2022
+     Bouke Stam 
+    ·
+    
+    Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+      
+      <script src="/js/coder.min.8fb86376a16e684af472a329aef502dbebcfab65ce264e9750d144912947c602.js" integrity="sha256-j7hjdqFuaEr0cqMprvUC2&#43;vPq2XOJk6XUNFEkSlHxgI="></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </body>
+
+</html>
