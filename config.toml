@@ -1,5 +1,5 @@
 baseURL = "https://technistuff.com"
-title = "Technistuff"
+title = "TechniStuff"
 theme = "hugo-coder"
 languageCode = "en"
 defaultContentLanguage = "en"
@@ -19,7 +19,7 @@ author = "Bouke Stam"
 # license = '<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA-4.0</a>'
 description = "Simple explanations of technical stuff"
 keywords = "blog,developer,personal"
-info = ["Blockchain Developers", "Deep Diver"]
+info = ["Blockchain Developer", "Deep Diver"]
 avatarURL = "images/avatar.jpeg"
 #gravatar = "john.doe@example.com"
 dateFormat = "January 2, 2006"

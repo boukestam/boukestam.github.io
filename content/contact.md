@@ -3,4 +3,4 @@ title = "Contact"
 slug = "contact"
 +++
 
-Follow me, @johndoe.
+The best way to reach me is via my [LinkedIn](https://www.linkedin.com/in/bouke-stam-0a1235107/).
