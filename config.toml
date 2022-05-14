@@ -12,6 +12,7 @@ enableEmoji = true
 # disqusShortname = "yourdiscussshortname"
 
 ignoreFiles = ["WIP"]
+publishDir = "docs"
 
 [params]
 author = "Bouke Stam"
