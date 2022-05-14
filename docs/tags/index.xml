@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on Technistuff</title>
-    <link>https://boukestam.github.io/tags/</link>
-    <description>Recent content in Tags on Technistuff</description>
+    <title>Tags on TechniStuff</title>
+    <link>https://technistuff.com/tags/</link>
+    <description>Recent content in Tags on TechniStuff</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 14 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://boukestam.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 14 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ethereum</title>
-      <link>https://boukestam.github.io/tags/ethereum/</link>
+      <link>https://technistuff.com/tags/ethereum/</link>
       <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://boukestam.github.io/tags/ethereum/</guid>
+      <guid>https://technistuff.com/tags/ethereum/</guid>
       <description></description>
     </item>
     

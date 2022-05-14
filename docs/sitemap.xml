@@ -2,59 +2,59 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://boukestam.github.io/tags/ethereum/</loc>
+    <loc>https://technistuff.com/about/</loc>
     <lastmod>2022-02-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/posts/ethereum-virtual-machine/</loc>
+    <loc>https://technistuff.com/tags/ethereum/</loc>
     <lastmod>2022-02-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/posts/</loc>
+    <loc>https://technistuff.com/posts/ethereum-virtual-machine/</loc>
     <lastmod>2022-02-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/tags/</loc>
+    <loc>https://technistuff.com/posts/</loc>
     <lastmod>2022-02-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/</loc>
+    <loc>https://technistuff.com/tags/</loc>
     <lastmod>2022-02-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/posts/ethash-pow-verification/</loc>
+    <loc>https://technistuff.com/</loc>
+    <lastmod>2022-02-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://technistuff.com/posts/ethash-pow-verification/</loc>
     <lastmod>2022-02-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/posts/merkle-patricia-trie/</loc>
+    <loc>https://technistuff.com/posts/merkle-patricia-trie/</loc>
     <lastmod>2022-02-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/posts/chain-synchronization/</loc>
+    <loc>https://technistuff.com/posts/chain-synchronization/</loc>
     <lastmod>2022-02-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/posts/ethereum-wire-protocol/</loc>
+    <loc>https://technistuff.com/posts/ethereum-wire-protocol/</loc>
     <lastmod>2022-01-24T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/posts/rlpx-transport-protocol/</loc>
+    <loc>https://technistuff.com/posts/rlpx-transport-protocol/</loc>
     <lastmod>2022-01-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/posts/kademlia-table/</loc>
+    <loc>https://technistuff.com/posts/kademlia-table/</loc>
     <lastmod>2022-01-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/posts/rlp-encoding/</loc>
+    <loc>https://technistuff.com/posts/rlp-encoding/</loc>
     <lastmod>2022-01-12T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/posts/node-discovery-protocol/</loc>
+    <loc>https://technistuff.com/posts/node-discovery-protocol/</loc>
     <lastmod>2022-01-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/posts/ethereum-deepdive/</loc>
+    <loc>https://technistuff.com/posts/ethereum-deepdive/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://boukestam.github.io/about/</loc>
-    <lastmod>2019-02-28T00:00:00+00:00</lastmod>
+    <loc>https://technistuff.com/authors/</loc>
   </url><url>
-    <loc>https://boukestam.github.io/authors/</loc>
+    <loc>https://technistuff.com/categories/</loc>
   </url><url>
-    <loc>https://boukestam.github.io/categories/</loc>
+    <loc>https://technistuff.com/contact/</loc>
   </url><url>
-    <loc>https://boukestam.github.io/contact/</loc>
+    <loc>https://technistuff.com/projects/</loc>
   </url><url>
-    <loc>https://boukestam.github.io/projects/</loc>
-  </url><url>
-    <loc>https://boukestam.github.io/series/</loc>
+    <loc>https://technistuff.com/series/</loc>
   </url>
 </urlset>
