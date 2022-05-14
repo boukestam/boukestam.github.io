@@ -1,4 +1,4 @@
-baseURL = "https://technistuff.com"
+baseURL = "https://boukestam.github.io"
 title = "Technistuff"
 theme = "hugo-coder"
 languageCode = "en"
