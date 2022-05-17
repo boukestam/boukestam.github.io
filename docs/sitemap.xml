@@ -2,22 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://technistuff.com/tags/ethereum/</loc>
+    <lastmod>2022-05-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://technistuff.com/posts/</loc>
+    <lastmod>2022-05-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://technistuff.com/posts/public-key-cryptography/</loc>
+    <lastmod>2022-05-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://technistuff.com/tags/</loc>
+    <lastmod>2022-05-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://technistuff.com/</loc>
+    <lastmod>2022-05-14T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://technistuff.com/about/</loc>
     <lastmod>2022-02-14T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://technistuff.com/tags/ethereum/</loc>
-    <lastmod>2022-02-14T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://technistuff.com/posts/ethereum-virtual-machine/</loc>
-    <lastmod>2022-02-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://technistuff.com/posts/</loc>
-    <lastmod>2022-02-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://technistuff.com/tags/</loc>
-    <lastmod>2022-02-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://technistuff.com/</loc>
     <lastmod>2022-02-14T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://technistuff.com/posts/ethash-pow-verification/</loc>

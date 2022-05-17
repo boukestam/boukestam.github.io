@@ -177,7 +177,7 @@ sendHello () {
 
 As you can see, we call our node the 'eth-node/v.0.1'. And we only support the latest version of the ethereum protocol (version 66). I then also wrote some code to handle the parsing of the response hello message. When we see that the peer doesn't support ```eth 66```, we send a disconnect message.
 
-A lot of nodes actually don't respond or respond with a ```Too many peers``` disconnect message. But after a few attempts we finally make a connection and immediately get a lot of messages:
+A lot of nodes don't respond or respond with a ```Too many peers``` disconnect message. But after a few attempts we finally make a connection and immediately get a lot of messages:
 
 ```
 Unhandled code 0x13

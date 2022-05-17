@@ -6,7 +6,7 @@ description = "How the Ethereum clients discover other nodes"
 tags = [ "ethereum", ] 
 +++
 
-The first step is to actually find some nodes that we can connect to. This process is defined as the [Node Discovery Protocol](https://github.com/ethereum/devp2p/blob/master/discv4.md). The process goes like this:
+The first step is to find some nodes that we can connect to. This process is defined as the [Node Discovery Protocol](https://github.com/ethereum/devp2p/blob/master/discv4.md). The process goes like this:
 
 1. Connect to a node with UDP
 2. Send ping
@@ -178,7 +178,7 @@ Package type 2 // pong
 Package type 1 // ping
 ```
 
-Apparently the node first replies with a pong message and then also sends us a ping. Looking at the documentation this actually makes sense:
+Apparently the node first replies with a pong message and then also sends us a ping. Looking at the documentation this makes sense:
 
 > If no communication with the sender has occurred within the last 12h, a ping should be sent in addition to pong in order to receive an endpoint proof.
 
@@ -214,7 +214,7 @@ As you can see I also wrote a helper method to make sending the message much eas
 packet-data = [target, expiration, ...]
 ```
 
-In the documentation it says that the target is supposed to be the 65-byte secp256k1 public key. But after getting no response and debugging for an hour, I finally found out it's actually supposed to be the 64-byte ID (the public key without 0x04). So this is the final version:
+In the documentation it says that the target is supposed to be the 65-byte secp256k1 public key. But after getting no response and debugging for an hour, I finally found out it's supposed to be the 64-byte ID (the public key without 0x04). So this is the final version:
 
 ```typescript
 await send(

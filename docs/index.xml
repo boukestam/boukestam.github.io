@@ -6,7 +6,17 @@
     <description>Recent content on TechniStuff</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 14 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 14 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Public Key Cryptography</title>
+      <link>https://technistuff.com/posts/public-key-cryptography/</link>
+      <pubDate>Sat, 14 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://technistuff.com/posts/public-key-cryptography/</guid>
+      <description>Each ethereum client and account identifies itself using a public key. The address is the last 20 bytes of the public key, usually displayed in hex format (0xf10ddd782c073D5644353a125F846E6Fc78ea235). Each public key is 64 bytes long and is created from a private key, which is kept secret. So how can we create a private and public key and how do they work?
+Private key    The private key is 32 bytes long and is usually created completely random.</description>
+    </item>
+    
     <item>
       <title>About</title>
       <link>https://technistuff.com/about/</link>
@@ -84,7 +94,7 @@ Through the Ethereum documentation I manage to find a document that explains the
       
       <guid>https://technistuff.com/posts/kademlia-table/</guid>
       <description>In the previous part we found out how to connect to nodes, send ping and pong messages and finally get a list of neighbor nodes. Now we need to continue this process until we have enough neighbors. But how much is enough? After reading the documentation I found out that we need to use a Kademlia Table.
-The table is actually more like a tree. We start of by calculating the distance between two nodes like this:</description>
+The table is more like a tree. We start of by calculating the distance between two nodes like this:</description>
     </item>
     
     <item>
@@ -103,7 +113,7 @@ The table is actually more like a tree. We start of by calculating the distance 
       <pubDate>Wed, 05 Jan 2022 00:00:00 +0000</pubDate>
       
       <guid>https://technistuff.com/posts/node-discovery-protocol/</guid>
-      <description>The first step is to actually find some nodes that we can connect to. This process is defined as the Node Discovery Protocol. The process goes like this:
+      <description>The first step is to find some nodes that we can connect to. This process is defined as the Node Discovery Protocol. The process goes like this:
  Connect to a node with UDP Send ping Receive pong Ask for nodes close to me Receive neighbor nodes Go back to step 1 for all neighbors until we have enough nodes  To start this process we need to know at least one node that we can connect with.</description>
     </item>
     

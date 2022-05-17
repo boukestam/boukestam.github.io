@@ -8,7 +8,7 @@ tags = [ "ethereum", ]
 
 This is the first post in a series on writing an Ethereum node from scratch. I want to do this because I'm the kind of person that understands things by trying to recreate it for myself. For that reason I decided to finally tackle one of the biggest mysteries to me. 
 
-I've been working as a blockchain developer for 1.5 years now, but honestly it's inner workings are still a big mystery to me. How do nodes talk to each other and collectively come to a consensus? How does all the cryptography actually work? What happens when I store a variable?
+I've been working as a blockchain developer for 1.5 years now, but honestly it's inner workings are still a big mystery to me. How do nodes talk to each other and collectively come to a consensus? How does all the cryptography work? What happens when I store a variable?
 
 ### The goal
 

@@ -295,7 +295,7 @@
 </span></span><span style="display:flex;"><span>  ]), <span style="font-weight:bold">false</span>);
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>As you can see, we call our node the &rsquo;eth-node/v.0.1&rsquo;. And we only support the latest version of the ethereum protocol (version 66). I then also wrote some code to handle the parsing of the response hello message. When we see that the peer doesn&rsquo;t support <code>eth 66</code>, we send a disconnect message.</p>
-<p>A lot of nodes actually don&rsquo;t respond or respond with a <code>Too many peers</code> disconnect message. But after a few attempts we finally make a connection and immediately get a lot of messages:</p>
+<p>A lot of nodes don&rsquo;t respond or respond with a <code>Too many peers</code> disconnect message. But after a few attempts we finally make a connection and immediately get a lot of messages:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Unhandled code 0x13
 </span></span><span style="display:flex;"><span>Unhandled code 0x18
 </span></span><span style="display:flex;"><span>Unhandled code 0x18

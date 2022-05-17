@@ -157,11 +157,11 @@
       <div>
         
         <p>In the previous part we found out how to connect to nodes, send ping and pong messages and finally get a list of neighbor nodes. Now we need to continue this process until we have enough neighbors. But how much is enough? After reading <a href="https://github.com/ethereum/devp2p/blob/master/discv4.md#kademlia-table">the documentation</a> I found out that we need to use a <code>Kademlia Table</code>.</p>
-<p>The table is actually more like a tree. We start of by calculating the distance between two nodes like this:</p>
+<p>The table is more like a tree. We start of by calculating the distance between two nodes like this:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>distance(n₁, n₂) = keccak256(n₁) XOR keccak256(n₂)
 </span></span></code></pre></div><p>This leaves us with a 256-bit number. We start of with the highest (left-most) bit. If this is a 1, we move to the left, if it&rsquo;s a zero, we move to the right. Then onto the next bit. We stop when we find a bucket with enough space in it. If there the bucket is full, but it can still be split further down, we do it. If we end up in a full bucket, we revalidate the nodes in there by sending a ping. If one of them doesn&rsquo;t respond, we replace it with the new one. We don&rsquo;t split further then one branch &lsquo;away&rsquo; in the 1 direction. See <a href="https://docs.google.com/presentation/d/11qGZlPWu6vEAhA7p3qsQaQtWH7KofEC9dMeBFZ1gYeA/edit#slide=id.g1718cc2bc_0661">this presentation</a> for a more visual explanation.</p>
 <p><img src="/images/kademlia.png" alt="Kademlia Table Visualisation"></p>
-<p>Because our target is always a distance of 0, we actually don&rsquo;t ever need to split into the &lsquo;1&rsquo; direction. Therefore we don&rsquo;t actually need it to be a tree. We can just treat it like a flat array. Index 0 is the 1 branch of the first split, index 1 the second split, etc&hellip; Therefore we can do it like this:</p>
+<p>Because our target is always a distance of 0, we don&rsquo;t ever need to split into the &lsquo;1&rsquo; direction. Therefore we don&rsquo;t need it to be a tree. We can just treat it like a flat array. Index 0 is the 1 branch of the first split, index 1 the second split, etc&hellip; Therefore we can do it like this:</p>
 <ul>
 <li>we have 256 buckets</li>
 <li>each bucket stores <code>k = 16</code> nodes</li>

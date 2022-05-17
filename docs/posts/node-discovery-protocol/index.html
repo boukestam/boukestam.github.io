@@ -156,7 +156,7 @@
 
       <div>
         
-        <p>The first step is to actually find some nodes that we can connect to. This process is defined as the <a href="https://github.com/ethereum/devp2p/blob/master/discv4.md">Node Discovery Protocol</a>. The process goes like this:</p>
+        <p>The first step is to find some nodes that we can connect to. This process is defined as the <a href="https://github.com/ethereum/devp2p/blob/master/discv4.md">Node Discovery Protocol</a>. The process goes like this:</p>
 <ol>
 <li>Connect to a node with UDP</li>
 <li>Send ping</li>
@@ -282,7 +282,7 @@
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Ping sent
 </span></span><span style="display:flex;"><span>Package type 2 // pong
 </span></span><span style="display:flex;"><span>Package type 1 // ping
-</span></span></code></pre></div><p>Apparently the node first replies with a pong message and then also sends us a ping. Looking at the documentation this actually makes sense:</p>
+</span></span></code></pre></div><p>Apparently the node first replies with a pong message and then also sends us a ping. Looking at the documentation this makes sense:</p>
 <blockquote>
 <p>If no communication with the sender has occurred within the last 12h, a ping should be sent in addition to pong in order to receive an endpoint proof.</p>
 </blockquote>
@@ -314,7 +314,7 @@
 </h3>
 <p>As you can see I also wrote a helper method to make sending the message much easier. After the pong message, we can send the FindNode message:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>packet-data = [target, expiration, ...]
-</span></span></code></pre></div><p>In the documentation it says that the target is supposed to be the 65-byte secp256k1 public key. But after getting no response and debugging for an hour, I finally found out it&rsquo;s actually supposed to be the 64-byte ID (the public key without 0x04). So this is the final version:</p>
+</span></span></code></pre></div><p>In the documentation it says that the target is supposed to be the 65-byte secp256k1 public key. But after getting no response and debugging for an hour, I finally found out it&rsquo;s supposed to be the 64-byte ID (the public key without 0x04). So this is the final version:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="font-weight:bold">await</span> send(
 </span></span><span style="display:flex;"><span>  encodePacket(initiatorPrivate, 0x03, rlpEncode([
 </span></span><span style="display:flex;"><span>    initiatorId,
