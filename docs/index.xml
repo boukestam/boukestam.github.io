@@ -6,7 +6,17 @@
     <description>Recent content on TechniStuff</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 14 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 11 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Zero Knowledge and Decentralized Gaming</title>
+      <link>https://technistuff.com/posts/zero-knowledge-in-gaming/</link>
+      <pubDate>Mon, 11 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://technistuff.com/posts/zero-knowledge-in-gaming/</guid>
+      <description>Recent developments in zk-SNARK and zk-STARK technologies have made it much easier to implement zero knowledge applications. Vitalik recently did a good post on the use cases in DeFi and governance. This post will focus on the use cases of zero knowledge in decentralized gaming.
+What is zero knowledge?    Every zero knowledge implementation starts with designing a circuit. This circuit contains some code that operates on private and public inputs.</description>
+    </item>
+    
     <item>
       <title>Public Key Cryptography</title>
       <link>https://technistuff.com/posts/public-key-cryptography/</link>
@@ -133,7 +143,7 @@ I&amp;rsquo;ve been working as a blockchain developer for 1.5 years now, but hon
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://technistuff.com/contact/</guid>
-      <description>The best way to reach me is via my LinkedIn.</description>
+      <description>The best way to reach me is on Twitter or via my LinkedIn.</description>
     </item>
     
     <item>

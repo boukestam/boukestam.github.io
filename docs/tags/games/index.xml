@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>games on TechniStuff</title>
+    <link>https://technistuff.com/tags/games/</link>
+    <description>Recent content in games on TechniStuff</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 11 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/tags/games/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Zero Knowledge and Decentralized Gaming</title>
+      <link>https://technistuff.com/posts/zero-knowledge-in-gaming/</link>
+      <pubDate>Mon, 11 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://technistuff.com/posts/zero-knowledge-in-gaming/</guid>
+      <description>Recent developments in zk-SNARK and zk-STARK technologies have made it much easier to implement zero knowledge applications. Vitalik recently did a good post on the use cases in DeFi and governance. This post will focus on the use cases of zero knowledge in decentralized gaming.
+What is zero knowledge?    Every zero knowledge implementation starts with designing a circuit. This circuit contains some code that operates on private and public inputs.</description>
+    </item>
+    
+  </channel>
+</rss>

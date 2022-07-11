@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/boukestam/Documents/blog'
+make: Leaving directory `/Users/boukestam/Documents/blog'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+
