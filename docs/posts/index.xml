@@ -6,7 +6,17 @@
     <description>Recent content in Posts on TechniStuff</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 11 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 23 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Heuristic Imperatives need Freedom</title>
+      <link>https://technistuff.com/posts/heuristic-imperatives-need-freedom/</link>
+      <pubDate>Sun, 23 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://technistuff.com/posts/heuristic-imperatives-need-freedom/</guid>
+      <description>Introduction    The heuristic imperatives are a set of rules designed by David Shapiro and aim to align autonomous AI agents towards a positive future for humanity. The imperatives are:
+ Reduce suffering Increase prosperity Increase understanding  In the examples below I will try to convince you that the heuristic imperatives can lead to the AI deciding to reduce freedom/independence in order to optimise the imperatives. I will also propose a possible solution to this by adding a fourth imperative.</description>
+    </item>
+    
     <item>
       <title>Zero Knowledge and Decentralized Gaming</title>
       <link>https://technistuff.com/posts/zero-knowledge-in-gaming/</link>
