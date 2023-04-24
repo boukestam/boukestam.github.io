@@ -35,4 +35,4 @@ Just as in the examples above, the AI has taken a choice from us (to have childr
 
 ### Solution
 I hope I have now convinced you that the current heuristic imperatives are missing an import aspect of human freedom and independence.
-My proposed solution is to add a fourth imperative to increase human freedom and independence. This should assure that the AI will never infringe on our right to make our own choices, as a species and as our own persons.
+My proposed solution is to add a fourth imperative to increase human freedom and independence. This should assure that the AI will never infringe on our right to make our own choices, as a species and as our own persons. The exact wording of this could be along the lines of "increase human autonomy". But this should be up to discussion and further research.
