@@ -6,14 +6,24 @@
     <description>Recent content in Posts on TechniStuff</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 23 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 28 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>An Analogy for Consciousness</title>
+      <link>https://technistuff.com/posts/an-analogy-for-consciousness/</link>
+      <pubDate>Fri, 28 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://technistuff.com/posts/an-analogy-for-consciousness/</guid>
+      <description>AI systems are becoming more advanced at an ever increasing pace. At some point these programs are going to be so good that we might start to wonder if they are alive. But how will we know? And what does it even mean to be alive, or conscious?
+Definitions    First it might be good to distinguish between being alive and being conscious. Animals and plants are alive, but most are probably not conscious.</description>
+    </item>
+    
     <item>
       <title>Heuristic Imperatives need Freedom</title>
       <link>https://technistuff.com/posts/heuristic-imperatives-need-freedom/</link>
       <pubDate>Sun, 23 Apr 2023 00:00:00 +0000</pubDate>
       
       <guid>https://technistuff.com/posts/heuristic-imperatives-need-freedom/</guid>
-      <description>Introduction    The heuristic imperatives are a set of rules designed by David Shapiro and aim to align autonomous AI agents towards a positive future for humanity. The imperatives are:
+      <description>The heuristic imperatives are a set of rules designed by David Shapiro and aim to align autonomous AI agents towards a positive future for humanity. The imperatives are:
  Reduce suffering Increase prosperity Increase understanding  In the examples below I will try to convince you that the heuristic imperatives can lead to the AI deciding to reduce freedom/independence in order to optimise the imperatives. I will also propose a possible solution to this by adding a fourth imperative.</description>
     </item>
     
