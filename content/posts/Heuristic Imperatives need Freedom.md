@@ -6,7 +6,6 @@ description = "Heuristic imperatives lack an imperative to maintain humanities i
 tags = [ "ai", "heuristic imperatives" ] 
 +++
 
-### Introduction
 The [heuristic imperatives](https://github.com/daveshap/BenevolentByDesign) are a set of rules designed by David Shapiro and aim to align autonomous AI agents towards a positive future for humanity. The imperatives are:
 
 - Reduce suffering
