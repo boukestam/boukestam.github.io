@@ -3178,7 +3178,9 @@ blockquote {
   padding-left: 2rem;
   line-height: 2.2rem;
   font-weight: 400;
-  font-style: italic; }
+  font-style: italic;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px; }
 
 th,
 td {
