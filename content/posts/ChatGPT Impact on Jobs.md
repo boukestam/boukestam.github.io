@@ -1,7 +1,7 @@
 +++ 
 author = "Bouke Stam" 
 title = "ChatGPT: Impact on Jobs" 
-date = "2023-04-30" 
+date = "2023-05-08" 
 description = "Explaining the impact that ChatGPT has and will have on our jobs, personal lives and future" 
 tags = [ "ai", "chatgpt" ] 
 +++
