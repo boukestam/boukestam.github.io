@@ -6,7 +6,16 @@
     <description>Recent content on TechniStuff</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 08 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 20 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Simulating a minimal cell in the browser</title>
+      <link>https://technistuff.com/posts/simulating-a-minimal-cell/</link>
+      <pubDate>Sat, 20 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://technistuff.com/posts/simulating-a-minimal-cell/</guid>
+      <description>Introduction    Have you ever wondered how life&amp;rsquo;s most basic units, cells, operate? As a programmer and cell biology enthusiast, I embarked on a journey to simulate the simplest cell using TypeScript. Cells are incredibly complex, scientists estimate that an average human cell has 100 trillion atoms. We still know very little about how all these molecules interact with each other, thus making it impossible to perform an exact simulation.</description>
+    </item>
+    
     <item>
       <title>ChatGPT: Impact on Jobs</title>
       <link>https://technistuff.com/posts/chatgpt-impact-on-jobs/</link>

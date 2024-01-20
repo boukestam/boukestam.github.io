@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>biology on TechniStuff</title>
+    <link>https://technistuff.com/tags/biology/</link>
+    <description>Recent content in biology on TechniStuff</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 20 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/tags/biology/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Simulating a minimal cell in the browser</title>
+      <link>https://technistuff.com/posts/simulating-a-minimal-cell/</link>
+      <pubDate>Sat, 20 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://technistuff.com/posts/simulating-a-minimal-cell/</guid>
+      <description>Introduction    Have you ever wondered how life&amp;rsquo;s most basic units, cells, operate? As a programmer and cell biology enthusiast, I embarked on a journey to simulate the simplest cell using TypeScript. Cells are incredibly complex, scientists estimate that an average human cell has 100 trillion atoms. We still know very little about how all these molecules interact with each other, thus making it impossible to perform an exact simulation.</description>
+    </item>
+    
+  </channel>
+</rss>
