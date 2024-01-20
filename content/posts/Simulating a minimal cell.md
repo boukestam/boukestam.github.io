@@ -31,7 +31,7 @@ Using this method, they mapped out which genes where critical and which where no
 Until they finally arrived at the minimal cell [JCVI-syn3A](https://www.jcvi.org/research/first-minimal-synthetic-bacterial-cell).
 
 The result is a genetically minimal bacterial cell with "only" 493 genes. 
-Compare that to another bacteria "E. Coli." which has 4637 genes and you can why they did this. 
+Compare that to another bacteria "E. Coli." which has 4637 genes and you can see why they did this. 
 Of the 493 genes only 20% is unclear in function, so scientists have enough information to start putting together a model for this cell. 
 This is exactly what they did in [Kinetic Modeling of the Genetic Information Processes in a Minimal Cell](https://pubmed.ncbi.nlm.nih.gov/31850364/).
 The resulting kinetic parameters are the foundation of the simulation we will build.
