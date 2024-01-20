@@ -42,7 +42,7 @@ The resulting kinetic parameters are the foundation of the simulation we will bu
 All data is publicly available in the [GitHub repository](https://github.com/Luthey-Schulten-Lab/Minimal_Cell) from the Luthey Schulten Lab.
 
 The entire genome is stored in the file [syn3A.gb](https://github.com/Luthey-Schulten-Lab/Minimal_Cell/blob/main/CME_ODE/model_data/syn3A.gb).
-This is a GenBank file that contains the DNA code and information about the genes and which proteins.
+This is a GenBank file that contains the DNA code and information about the genes and which proteins they code for.
 For example we can see that the gene in position 497075..498190 creates the protein Dihydrofolate synthase. 
 Which consists of the amino acids MISV...NNKF. 
 Where M = Methionine, I = Isoleucine, etc...
