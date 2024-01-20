@@ -114,21 +114,21 @@ The different systems that are included are:
 - Transport reactions
 
 Differential equations are very common in computer software.
-For example when creating a game, on often simulates movement by constantly increasing the position with the velocity multiplied by Δt. 
+For example when creating a game, one often simulates movement by constantly increasing the position with the velocity multiplied by Δt. 
 In this case the velocity is the derivative of the position. 
 
 In our biological simulation, the concentrations are increased by the reaction rates multiplied by Δt.
-For each metabolite we count up the reachtions that consume it, and the reactions that produce it.
+For each metabolite we count up the reactions that consume it, and the reactions that produce it.
 This produces a very large derivative function, which is very "stiff".
 Stiff means that the function is very unstable and quickly goes to infinity when not integrated carefully.
 
-To solve this differentiall equation we need to use a specialised integration method called LSODA.
+To solve this differential equation we need to use a specialised integration method called LSODA.
 This algorithm constantly checks the error and adjusts the timestep size to keep the integration stable.
-LSODA is originally written in 1983 using the programming language Fortran.
+LSODA was originally written in 1983 using the programming language Fortran.
 But thankfully there is the project [libsoda](https://github.com/sdwfrost/liblsoda/tree/master) that has a C version of the code.
 
 Using the tool `Emscripten` its possible to compile this code to Web Assembly (WASM), so we can run it in the browser. 
-This has the added adventage that its really fast, because Web Assembly runs directly on the CPU which makes it much faster than JavaScript.
+This has the added advantage that its really fast, because Web Assembly runs directly on the CPU which makes it much faster than JavaScript.
 
 ### Communication between CME and ODE
 We now have two separate systems, the CME for genetic processes and the ODE for metabolism.
