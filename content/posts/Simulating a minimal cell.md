@@ -103,7 +103,7 @@ This results in variation between different cells. Some cells grow quicker, or s
 When running the program multiple times, you get a different result each time, just like you would in the real world.
 
 ### Ordinary Differential Equation (ODE)
-The metabolic reactions are calculated deterministically (not random) using an orderinary differential equation (ODE).
+The metabolic reactions are calculated deterministically (not random) using an ordinary differential equation (ODE).
 The different systems that are included are:
 
 - Central metabolism
