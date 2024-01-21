@@ -168,5 +168,7 @@ In this kind of simulation, you simulate each atom (or small groups of atoms) in
 This is being worked on in some initial research, for example the paper [Molecular dynamics simulation of an entire cell](https://www.frontiersin.org/articles/10.3389/fchem.2023.1106495/full).
 At the moment scientists are still missing a lot of data and software capabilities, so this will probably take a long time before becoming a reality.
 
-### Code
-The complete source code for this project is publicly available on [my GitHub](https://github.com/boukestam/cell).
+### Demo and code
+You can run the simulation yourself on my [website](https://technistuff.com/cell/).
+
+The complete source code for this project is publicly available on my [GitHub](https://github.com/boukestam/cell).
