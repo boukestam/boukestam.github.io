@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>history on TechniStuff</title>
+    <link>https://technistuff.com/tags/history/</link>
+    <description>Recent content in history on TechniStuff</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 15 May 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/tags/history/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>An interactive historical model of Earth</title>
+      <link>https://technistuff.com/posts/an-interactive-historical-model-of-earth/</link>
+      <pubDate>Thu, 15 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://technistuff.com/posts/an-interactive-historical-model-of-earth/</guid>
+      <description>Introduction    In this post I will explain how I built an interactive historical model of earth. Why did I do this? I wanted to make a good way to visualise how geography played a role in human history. The shifting sea levels and large ice sheets during the last ice age explain human migration to the americas and archeological finds under the sea.
+The model that I built covers the last 100,000 years and includes elevation, rising sea levels, changing climate and ice sheets.</description>
+    </item>
+    
+  </channel>
+</rss>

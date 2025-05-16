@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+
+    
+
+    <meta name="author" content="Bouke Stam">
+    <meta name="description" content="Building an interactive historical model of the earth using THREE.js and climate data">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="An interactive historical model of Earth"/>
+<meta name="twitter:description" content="Building an interactive historical model of the earth using THREE.js and climate data"/>
+
+    <meta property="og:title" content="An interactive historical model of Earth" />
+<meta property="og:description" content="Building an interactive historical model of the earth using THREE.js and climate data" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://technistuff.com/posts/an-interactive-historical-model-of-earth/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2025-05-15T00:00:00+00:00" />
+<meta property="article:modified_time" content="2025-05-15T00:00:00+00:00" />
+
+
+
+    <title>
+  An interactive historical model of Earth · TechniStuff
+</title>
+
+    
+      <link rel="canonical" href="https://technistuff.com/posts/an-interactive-historical-model-of-earth/">
+    
+
+    <link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.b9fb9d10bbea855165ff81f10d21b48ae56932365a17c20e6c7afd674b283964.css" integrity="sha256-ufudELvqhVFl/4HxDSG0iuVpMjZaF8IObHr9Z0soOWQ=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+      
+        
+        
+        <link rel="stylesheet" href="/css/coder-dark.min.002ee2378e14c7a68f1f0a53d9694ed252090987c4e768023fac694a4fc5f793.css" integrity="sha256-AC7iN44Ux6aPHwpT2WlO0lIJCYfE52gCP6xpSk/F95M=" crossorigin="anonymous" media="screen" />
+      
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+    <meta name="generator" content="Hugo 0.98.0" />
+  </head>
+
+  
+  
+    
+  
+  <body class="preload-transitions colorscheme-auto">
+    
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      TechniStuff
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/projects/">Projects</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/contact/">Contact me</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://technistuff.com/posts/an-interactive-historical-model-of-earth/">
+              An interactive historical model of Earth
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime="2025-05-15T00:00:00Z">
+                May 15, 2025
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              6-minute read
+            </span>
+          </div>
+          
+          
+          <div class="tags">
+  <i class="fa fa-tag" aria-hidden="true"></i>
+    <span class="tag">
+      <a href="/tags/programming/">programming</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="/tags/history/">history</a>
+    </span></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        <h3 id="introduction">
+  Introduction
+  <a class="heading-link" href="#introduction">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>In this post I will explain how I built an interactive historical model of
+earth. Why did I do this? I wanted to make a good way to visualise how geography
+played a role in human history. The shifting sea levels and large ice sheets
+during the last ice age explain human migration to the americas and
+archeological finds under the sea.</p>
+<p>The model that I built covers the last 100,000 years and includes elevation,
+rising sea levels, changing climate and ice sheets. For this I used multiple
+data sources, data processing and THREE.js to render it all.</p>
+<p><img src="earth_demo.png" alt="Demo"></p>
+<h3 id="elevation-map">
+  Elevation map
+  <a class="heading-link" href="#elevation-map">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>The most important data that we need is a global elevation map of the earth.
+This tells us the height of the terrain with a certain resolution. Each pixel
+has a value between -8714 and 5724. Everest is not included because the actual
+high point is very small.</p>
+<p>We can use the
+<a href="https://www.ncei.noaa.gov/products/etopo-global-relief-model">ETOPO Global Relief Model</a>
+from NOAA (National Centers for Environmental Information) for this. It contains
+data up to 15 arc-second resolution, much more than we need.</p>
+<p>For the my purposes, i only need about 180 arc-second resolution, so I
+downloaded the 60 arc-second file and downsampled it used gdalwarp to 0.05
+degrees (1 degree = 3600 arc-seconds). This brings it down to around 100MB,
+making it much easier to work with.</p>
+<p><code>gdalwarp -tr 0.05 0.05 -r average ETOPO_2022_v1_60s_N90W180_bed.tif output.tif</code></p>
+<p>I then loaded this in Node.js using geotiff and wrote a script to compress it
+even further. We only need high resolution around the sea level, for determining
+the exact water line, so we can make a custom value range for this. We can
+compress every height value to a byte (max 256 values), by allocating 25 values
+for underwater, 25 for land and the remaining 206 values for the sea level.
+Sincesea levels only fluctuated by around 160 meters, this is more than enough
+for our purposes.</p>
+<p><img src="earth_height.png" alt="Height Map"></p>
+<p>We can render this using a custom shader and a sphere in THREE.js. We load the
+heightTexture and sample the color using the texture coordinate. Then we convert
+this grayscale value back to the height and then darken the output color
+accordingly.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-glsl" data-lang="glsl"><span style="display:flex;"><span><span style="font-weight:bold">vec4</span> heightColor = texture2D(heightTexture, vUv);
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">float</span> heightIntensity = heightColor.r * 255.0;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">float</span> height = 0.0;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">if</span> (heightIntensity &lt; 25.0) {
+</span></span><span style="display:flex;"><span>  height = -150.0 + (25.0 - heightIntensity) / 25.0 * -8714.0;
+</span></span><span style="display:flex;"><span>} <span style="font-weight:bold">else</span> <span style="font-weight:bold">if</span> (heightIntensity &lt;= 230.0) {
+</span></span><span style="display:flex;"><span>  height = heightIntensity - 175.0;
+</span></span><span style="display:flex;"><span>} <span style="font-weight:bold">else</span> {
+</span></span><span style="display:flex;"><span>  height = (heightIntensity - 230.0) / 25.0 * 5724.0;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">if</span> (height &lt; sealevel) {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">float</span> darkness = 1.0 - (height / -8714.0 * 0.25);
+</span></span><span style="display:flex;"><span>  outColor = waterColor * darkness;
+</span></span><span style="display:flex;"><span>} <span style="font-weight:bold">else</span> {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">float</span> darkness = 1.0 - (height / 5724.0 * 0.25);
+</span></span><span style="display:flex;"><span>  outColor = grassColor * darkness;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="earth_height_render.png" alt="Terrain Render"></p>
+<h3 id="historic-sea-levels">
+  Historic sea levels
+  <a class="heading-link" href="#historic-sea-levels">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>To make this interactive we will need data about historic sea levels. I
+downloaded the
+<a href="https://www1.ncdc.noaa.gov/pub/data/paleo/contributions_by_author/spratt2016/spratt2016.txt">Global Sea Level Reconstruction dataset</a>
+from the NOAA Paleoclimatology Program. This contains global sea levels up to
+800,000 years ago. I extracted only the sea level values and stored these in a
+binary file.</p>
+<p>If we now switch between 15,000 years ago and the present, you can see that the
+area between Great Brittain and mainland Europe was previously connected (see
+image below). This area is called Doggerland and fisherman still dredge up bone
+tools, mammoth tusks from there. Another interesting area is the Bering Strait.
+This gap between Russia and Alaska used to land, and facilitated the movement of
+early humans from Asia to the Americas.</p>
+<p><img src="earth_doggerland_transition.png" alt="Dogger Land"></p>
+<h3 id="climate-data">
+  Climate data
+  <a class="heading-link" href="#climate-data">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>Now we have an interactive map, but everything is still either green or blue. To
+add some more color we need information about the climate, like rainfall and
+temperature. Lucky for us there is
+<a href="https://www.ncei.noaa.gov/access/paleo-search/study/38661">a dataset</a> that
+contains simulated climate data up to 3 million years ago. You can see an
+example of daily average rainfall below:</p>
+<p><img src="earth_precipitation.png" alt="Precipitation Graph"></p>
+<p>I load the data into the GPU using a sampler2DArray. This is basically a stack
+of textures, where each layer in the stack is a certain time period. Each pixel
+in a texture contains r, g and b values, which encode for minimum and maximum
+temperature and rainfall. By sampling this texture, you sample both over time
+and over location. So if the current view year is between two layers, it will
+average the values.</p>
+<p>I then wrote some code to choose the render color, based on these values. And a
+function to slide between different colors so there are no hard edges. For
+example when the temperature is high and the rainfall is low, it is desert. But
+if the rainfall is high, it shows as forest. With some tweeking this turned out
+to work really well for my purposes.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-glsl" data-lang="glsl"><span style="display:flex;"><span><span style="font-weight:bold">vec3</span> slideColor(<span style="font-weight:bold">vec3</span> from, <span style="font-weight:bold">vec3</span> to, <span style="font-weight:bold">float</span> value, <span style="font-weight:bold">float</span> low, <span style="font-weight:bold">float</span> high) {
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">float</span> ratio = (value - low) / (high - low);
+</span></span><span style="display:flex;"><span>  <span style="font-weight:bold">return</span> mix(from, to, ratio);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="font-weight:bold">vec3</span> color = slideColor(
+</span></span><span style="display:flex;"><span>  slideColor(
+</span></span><span style="display:flex;"><span>    snowColor, 
+</span></span><span style="display:flex;"><span>    slideColor(desertColor, grassColor, precipitation, 250.0, 500.0), 
+</span></span><span style="display:flex;"><span>    maxTemp, 5.0, 10.0
+</span></span><span style="display:flex;"><span>  ),
+</span></span><span style="display:flex;"><span>  slideColor(
+</span></span><span style="display:flex;"><span>    slideColor(desertColor, grassColor, precipitation, 400.0, 1000.0),
+</span></span><span style="display:flex;"><span>    slideColor(grassColor, forestColor, precipitation, 1000.0, 2000.0),
+</span></span><span style="display:flex;"><span>    precipitation, 200.0, 1000.0
+</span></span><span style="display:flex;"><span>  ),
+</span></span><span style="display:flex;"><span>  maxTemp, 0.0, 10.0
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><p><img src="earth_climate.png" alt="Climate Render"></p>
+<h3 id="ice-sheets">
+  Ice sheets
+  <a class="heading-link" href="#ice-sheets">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>The last ice age ended about 12,000 years ago and had a big impact on early
+human settlement. We will need accurate data about the historical locations of
+ice sheets that were formed to visualise this on our globe. I ended up using the
+<a href="https://doi.pangaea.de/10.1594/PANGAEA.905800">Global ice sheet reconstruction for the past 80000 years dataset</a>.
+This is the most accurate and highest resolution dataset I could find, with a
+0.25 degree grid and 2500 year time steps.</p>
+<p>This dataset is in NetCDF format which I parsed using the netcdf4 library. It
+contains ice thickness data, but for my purposes it is enough to know if there
+is an ice sheet or not. The output of this looks like the image below:</p>
+<p><img src="earth_ice_raw.png" alt="Ice Raw"></p>
+<p>To render this efficiently with a GPU, we need to somehow transform this into
+triangles. Because even a very large texture would look ugly when zoomed in. I
+did this in multiple steps. First I find all individual &ldquo;islands&rdquo; of ice using a
+flood fill algorithm. Then I find the edges of each island and turn that into
+lists of coordinates. Then I run a smoothing step to smooth out the edges and
+optimize the amount of points needed.</p>
+<p><img src="earth_ice.svg" alt="Ice Debug"></p>
+<p>I then add points in regular intervals over the surface of the shape (red
+points). After that I use
+<a href="https://github.com/mapbox/delaunator">Delaunay triangulation</a> to turn this into
+triangles by creating edges between the points in a smart way. You can see the
+result of this below:</p>
+<p><img src="earth_triangles.png" alt="Ice Triangles"></p>
+<p>Then we can project these flat points onto our globe and render these shapes
+using THREE.js. The added points in the center are essential to ensure a smooth
+curvature. The shader also darkens higher elevations to give some texture to the
+ice sheets.</p>
+<p><img src="earth_ice.png" alt="Ice Render"></p>
+<h3 id="borders">
+  Borders
+  <a class="heading-link" href="#borders">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>Lastly I wanted to add modern country borders to make it easier to understand
+the exact locations of certain features. I used the
+<a href="https://public.opendatasoft.com/explore/dataset/world-administrative-boundaries/export/">World Administrative Boundaries - Countries and Territories</a>
+for this. This dataset stores the coordinates of all borders between different
+countries.</p>
+<p>I used the same smoothing algorithm from before to smooth the jagged edges and
+reduce the number of points. This was then rendered on top of the globe using
+THREE.js lines.</p>
+<p><img src="earth_borders.png" alt="Borders Render"></p>
+<h3 id="demo">
+  Demo
+  <a class="heading-link" href="#demo">
+    <i class="fa fa-link" aria-hidden="true"></i>
+  </a>
+</h3>
+<p>You can check out the live demo <a href="https://technistuff.com/human-history">here</a></p>
+<p>My next steps are to look at finding more accurate data, or datasets that go
+even further back in time. I would also like to display historical events like
+human migration, first civilisations and wars onto the map. I already made a
+start on this, but it needs more work.</p>
+<p><img src="earth_preview.png" alt="Events Preview"></p>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/srO5sq4_Mxw" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "technistuff" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    ©
+    
+      2019 -
+    
+    2025
+     Bouke Stam 
+    ·
+    
+    Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+      
+      <script src="/js/coder.min.8fb86376a16e684af472a329aef502dbebcfab65ce264e9750d144912947c602.js" integrity="sha256-j7hjdqFuaEr0cqMprvUC2&#43;vPq2XOJk6XUNFEkSlHxgI="></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CBGMH47GBH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CBGMH47GBH');
+</script>
+
+  </body>
+
+</html>

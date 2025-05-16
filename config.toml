@@ -88,7 +88,7 @@ url = "https://github.com/boukestam"
 name = "Twitter"
 icon = "fa fa-2x fa-twitter"
 weight = 3
-url = "https://twitter.com/ai__philosopher"
+url = "https://x.com/pinguisimo"
 
 [[params.social]]
 name = "LinkedIn"
@@ -118,3 +118,6 @@ url = "projects/"
 name = "Contact me"
 weight = 5
 url = "contact/"
+
+[markup.goldmark.renderer]
+unsafe = true
