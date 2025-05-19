@@ -1,6 +1,6 @@
 +++ 
 author = "Bouke Stam" 
-title = "An interactive historical model of Earth" 
+title = "Visualizing 100,000 Years of Earth in WebGL" 
 date = "2025-05-19" 
 description = "Building an interactive historical model of Earth using THREE.js and climate data" 
 tags = [ "programming", "history" ] 
