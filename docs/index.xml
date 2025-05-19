@@ -9,10 +9,10 @@
     <lastBuildDate>Mon, 19 May 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://technistuff.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Visualizing 100,000 Years of Earth in WebGL</title>
-      <link>https://technistuff.com/posts/an-interactive-historical-model-of-earth/</link>
+      <link>https://technistuff.com/posts/visualizing-100000-years-of-earth-in-webgl/</link>
       <pubDate>Mon, 19 May 2025 00:00:00 +0000</pubDate>
       
-      <guid>https://technistuff.com/posts/an-interactive-historical-model-of-earth/</guid>
+      <guid>https://technistuff.com/posts/visualizing-100000-years-of-earth-in-webgl/</guid>
       <description>What did Earth look like when humans migrated to the Americas? Changing sea levels and large ice sheets during the last ice age played a key role in human migration and explain many archaeological sites now buried under the sea.
 I wanted a better way to visualize how geography shaped our history. So I built an interactive historical model of Earth, covering the last 100,000 years. It includes elevation, rising sea levels, changing climate and moving ice sheets.</description>
     </item>
