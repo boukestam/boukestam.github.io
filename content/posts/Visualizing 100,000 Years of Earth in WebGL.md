@@ -8,7 +8,7 @@ tags = [ "programming", "history" ]
 
 What did Earth look like when humans migrated to the Americas? Changing sea levels and large ice sheets during the last ice age played a key role in human migration and explain many archaeological sites now buried under the sea. 
 
-I wanted a better way to visualize how geography shaped our history. So I built an interactive historical model of Earth, covering the last 100,000 years. It includes elevation, rising sea levels, changing climate and moving ice sheets. And it works in your browser. In this post I will explain how I built this using multiple scientific datasets, data processing, THREE.js and shaders. Want to skip ahead? [Try out the demo](https://technistuff.com/human-history)
+I wanted a better way to visualize how geography shaped our history. So I built an interactive historical model of Earth, covering the last 100,000 years. It includes elevation, rising sea levels, changing climate and moving ice sheets. And it works in your browser. In this post I will explain how I built this using multiple scientific datasets, data processing, THREE.js and shaders. Want to skip ahead? [Try out the demo](https://technistuff.com/history-from-space)
 
 ![Demo](/images/earth_demo.png)
 
@@ -126,7 +126,7 @@ I used the same smoothing algorithm from before to smooth the jagged edges and r
 
 ### Demo
 
-This project taught me a lot about geography, data processing and working with graphics shaders in the browser. You can check out the live demo [here](https://technistuff.com/human-history). And also in the video below:
+This project taught me a lot about geography, data processing and working with graphics shaders in the browser. You can check out the live demo [here](https://technistuff.com/history-from-space). And also in the video below:
 
 {{< youtube srO5sq4_Mxw >}}
 
