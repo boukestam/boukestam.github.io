@@ -130,6 +130,6 @@ This project taught me a lot about geography, data processing and working with g
 
 {{< youtube srO5sq4_Mxw >}}
 
-My next steps are to look at finding more accurate data, or datasets that go further back in time. And optimize the rendering. I would also like to display historical events like human migration, early civilisations, and wars on the globe. I already made a start, but it needs more work. If this kind of project excites you, follow along [on GitHub](https://github.com/boukestam/human-history) or reach out me via [LinkedIn](https://www.linkedin.com/in/bouke-stam-0a1235107/).
+My next steps are to look at finding more accurate data, or datasets that go further back in time. And optimize the rendering. I would also like to display historical events like human migration, early civilisations, and wars on the globe. I already made a start, but it needs more work. If this kind of project excites you, follow along [on GitHub](https://github.com/boukestam/history-from-space) or reach out me via [LinkedIn](https://www.linkedin.com/in/bouke-stam-0a1235107/).
 
 ![Events Preview](/images/earth_preview.png)
