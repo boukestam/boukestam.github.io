@@ -172,3 +172,5 @@ At the moment scientists are still missing a lot of data and software capabiliti
 You can run the simulation yourself on my [website](https://technistuff.com/cell/).
 
 The complete source code for this project is publicly available on my [GitHub](https://github.com/boukestam/cell).
+
+Discuss on [Hacker News](https://news.ycombinator.com/item?id=39066165)
